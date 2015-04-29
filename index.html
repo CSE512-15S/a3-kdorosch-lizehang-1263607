@@ -4,10 +4,33 @@
 
 <body>
 
-<script>
-// Javascript stuff here
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<h1>Title here</h1>
 
+<!-- Define div boxes for all the main components of the graphic -->
+<!-- <div id="maingraph"></div> -->
+<!-- <div id="brush"/> -->
+<div id="tooltip" class="hidden">
+	<p><span id="value"/></p>
+</div>
+<div id="selectionboxes">
+	<p id="dimensionsHeader">Select the data to be displayed:</p>
+	<select id="dimensions" onchange="SelectDimension()">
+		<option value="subject">Subject</option>
+		<option value="gender">Gender</option>
+		<!-- TODO add more -->
+		<!-- TODO check spelling w/ what's used in the database -->
+	</select>
 
-</script>
+	<br/><br/>
+
+	<!-- <p id="uniqueCheckboxheader">Display unique students?</p> -->
+	<input type="checkbox" id="uniqueCheckbox" value="uniqueCheckbox" onchange="SelectCheckbox()"> Display unique students only.<br> Note that this will only show a student's first visit. 
+	<!-- TODO is this true? either way we need to describe what's being displayed -->
+</div>
+
+<script type="text/javascript" src="sampleJSON.json"></script>
+<script type="text/javascript" src="script.js"></script>
+
 </body>
 </html>
