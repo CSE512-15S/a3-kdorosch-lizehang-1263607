@@ -48,7 +48,7 @@ var lineplot_generator = function(){
             // .interpolate("monotone")
             .x(function(d) { return x(d.date); })
             .y0(height)
-            .y1(function(d) {console.log(y(d.counts));return y(d.counts); });
+            .y1(function(d) {/*console.log(y(d.counts));*/return y(d.counts); });
 
       var svg = d3.select("#lineplot")
         .append("svg")

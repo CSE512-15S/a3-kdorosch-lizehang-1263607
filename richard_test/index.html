@@ -3,7 +3,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
 <body>
-
+<script type="text/javascript" src="global_init.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <h1>Title here</h1>
 
@@ -17,7 +17,7 @@
 	<p id="dimensionsHeader">Select the data to be displayed:</p>
 	<select id="dimensions" onchange="SelectDimension()">
 		<option value="subject">Subject</option>
-		<option value="gender">Gender</option>
+		<option value="s1_gender">Gender</option>
 		<!-- TODO add more -->
 		<!-- TODO check spelling w/ what's used in the database -->
 	</select>
@@ -29,19 +29,26 @@
 	<!-- TODO is this true? either way we need to describe what's being displayed -->
 </div>
 
+
+<div class="container">
+      <div id="lineplot"></div>
+</div>
+
 <div class="container">
 	<div id="brush"></div>
 </div>
+
 <div class="container">
-      <div id="lineplot"></div>
+	<div id="barplot"></div>
 </div>
 
 <!-- load jQuery -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 
-<script type="text/javascript" src="sampleJSON.json"></script>
+<!-- <script type="text/javascript" src="sampleJSON.json"></script> -->
 <script type="text/javascript" src="brush.js"></script>
 <script type="text/javascript" src="lineplot.js"></script>
+<script type="text/javascript" src="barplot.js"></script>
 <script type="text/javascript" src="main.js"></script>
 
 
