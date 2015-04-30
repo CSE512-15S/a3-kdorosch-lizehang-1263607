@@ -102,19 +102,43 @@ var lineplot_generator = function(){
         svg = d3.select("div#lineplot"); 
 
        var parseformat = d3.time.format("%d-%b-%y").parse;
+      
+      d3.csv("students_data_v2.csv", function(error, csv_data) {
+       var data = d3.nest()
+        .key(function(d) { return d['checkin date'];})
+        .rollup(function(leaves) { return leaves.length; }).entries(csv_data);
+        // .rollup(function(d) { 
+        //  return d3.sum(d, function(g) {return g.value; });
+        // }).entries(csv_data);
 
-        d3.csv("daysum.csv", function(error, data) {
-          if (error) return console.warn(error);
-          this.data = data;
-          console.log(data);
-          for(var i=0; i<data.length; i++) {
-            // data[i].subject = data[i].subject;
-            data[i].date = parseformat(data[i].date);
-            data[i].counts = +data[i].counts;
-          }
+        data.forEach(function(d) {
+           d.date = parseformat(d.key);
+           d.counts = d.values;
+          });
 
-          update_view();
-        }); 
+        // sort date
+        function sortByDateAscending(a, b) {
+            // Dates will be cast to numbers automagically:
+            return a.date - b.date;
+        }
+
+        data = data.sort(sortByDateAscending);
+
+        this.data = data;
+        update_view();
+      });
+        // d3.csv("daysum.csv", function(error, data) {
+        //   if (error) return console.warn(error);
+        //   this.data = data;
+        //   console.log(data);
+        //   for(var i=0; i<data.length; i++) {
+        //     // data[i].subject = data[i].subject;
+        //     data[i].date = parseformat(data[i].date);
+        //     data[i].counts = +data[i].counts;
+        //   }
+
+        //   update_view();
+        // }); 
   }; 
 
   return {
