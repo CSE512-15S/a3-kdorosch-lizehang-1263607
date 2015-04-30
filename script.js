@@ -22,9 +22,7 @@ var xAxis = d3.svg.axis().scale(x).orient("bottom"),
 // TODO define variables for the area plot generation here
 var canvas = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    ;
-
+    .attr("height", height + margin.top + margin.bottom);
 
 canvas.append("labels")
 	.append("clipPath") // make sure the content stays in its box
@@ -54,19 +52,25 @@ function SelectCheckbox() {
 
 function SelectDimension() {
     var temp = document.getElementById("dimensions");
-    var dim = temp.options[temp.selectedIndex].value;    
+    var dim = temp.options[temp.selectedIndex].value;
     alert("Dimension selected: " + dim);
-    
-    // two options for how to use this:
-    //    - create cases for each dimension selected and make a 
-    //      custom call to the data-getting function for each one
-    //    - use the variable itself in a generic function call
+    //TODO implement call to the web service
 }
 
 
 var brush = d3.svg.brush()
     .x(x2)
     .on("brush", brushed);
+
+function brushed() {
+  x.domain(brush.empty() ? x2.domain() : brush.extent());
+  xAxis.scale(x);
+
+  fcs.select(".axis").call(xAxis);
+
+  fcs.selectAll(".subject").select("path.area")
+      .attr("d", function(d) { return area(d.values); });
+}
 
 var currentDimensionSelection = "subject",
     boxChecked = true,
