@@ -9,20 +9,18 @@ var lineplot_generator = function(){
       canvas_width = +(d3.select('#lineplot').style('width').replace('px', ''));
       width = canvas_width - margin.left - margin.right;
   };
+  var color = d3.scale.category20();
 
   var upper_time_limit = new Date(2014, 06, 01);
   var lower_time_limit = new Date(2013, 09, 22);
   var current_range = [lower_time_limit, upper_time_limit];
-
   var dateDiff = function(from, to) {
       var milliseconds = to - from;
       return milliseconds / 86400000;
     };
 
-  
-  
-  
-  var update_view = function(time_range){
+
+ var update_view = function(time_range){
     
     // if not called with a time range
     if(typeof time_range !== 'undefined'){
@@ -32,61 +30,75 @@ var lineplot_generator = function(){
     //TODO update stack area
      d3.select("div#lineplot svg").remove();
      var xScale = d3.time.scale()
-      .range([0, width])
-      .domain(current_range);
-
-      // create scale function
+                    .range([0, width])
+                    .domain(current_range);
+     // var yScale = d3.scale.linear()
+     //                .domain([0, d3.max(data.map(function(d) { return d.counts; }))]) 
+     //                .nice();
+       
+      // tell scale function the domain         
       var x = d3.time.scale().range([0, width]),
           y = d3.scale.linear().range([height, 0]);  
-      // tell scale function the domain    
-       // x.domain(d3.extent(data.map(function(d) { return d.date; })));
-       x.domain(current_range);
-       y.domain([0, d3.max(data.map(function(d) { return d.counts; }))]);
+      x.domain(current_range);
+      y.domain([0, d3.max(data.map(function(d) { return d.counts; }))]);
 
       // create a area
-       var area = d3.svg.area()
-            // .interpolate("monotone")
-            .x(function(d) { return x(d.date); })
-            .y0(height)
-            .y1(function(d) {console.log(y(d.counts));return y(d.counts); });
+      var area = d3.svg.area()
+                .interpolate("basis")
+                .x(function(d) { return x(d.date); })
+                .y0(height)
+                .y1(function(d) {return y(d.counts); });
 
+      // create SVG      
       var svg = d3.select("#lineplot")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
       
       svg.append("defs").append("clipPath")
-          .attr("id", "clip")
-          .append("rect")
-          .attr("width", width)
-          .attr("height", height);
+                        .attr("id", "clip")
+                        .append("rect")
+                        .attr("width", width)
+                        .attr("height", height);
 
       var focus = svg.append("g")
-          .attr("class", "focus")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                  .attr("class", "focus")
+                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       // Draw the xAxis text
       var days = dateDiff(current_range[0], current_range[1])
       var xAxis = d3.svg.axis()
-          .scale(xScale)
-          .orient('bottom');
+                  .scale(xScale)
+                  .orient('bottom');
+      // var yAxis = d3.svg.axis()
+      //             .scale(yScale)
+      //             .orient('left');
 
       // TODO: smart axis depending on the range of days    
       if( days < 1000)
        xAxis.ticks(d3.time.month, 1)
-            .tickFormat(d3.time.format('%b-%y'));
+            .tickFormat(d3.time.format('%b-%Y'));
+      if( days < 90)
+       xAxis.ticks(d3.time.week, 1)
+            .tickFormat(d3.time.format('%d-%b'));
+      if( days < 14)
+       xAxis.ticks(d3.time.day, 1)
+            .tickFormat(d3.time.format('%d-%b'));
 
       svg.append("g")
           .attr("class", "x grid")
-          .call(xAxis);
 
      
-       focus.append("path")
-          .datum(data)
-          .attr("class", "area")
-          .attr("d", area);
+      focus.append("path")
+           .datum(data)
+           .attr("class", "area")
+           .attr("d", area);
+
+      // focus.append("g")
+      //      .attr("class", "y axis")
+      //      .call(yAxis);
 
       focus.append("g")
           .attr("class", "x axis")
@@ -94,7 +106,7 @@ var lineplot_generator = function(){
           .call(xAxis);
 
             
-  }; 
+  };  
 
   var init = function(){
         var that = this;
@@ -105,17 +117,20 @@ var lineplot_generator = function(){
       
       d3.csv("students_data_v2.csv", function(error, csv_data) {
        var data = d3.nest()
-        .key(function(d) { return d['checkin date'];})
+        .key(function(d) { return d['checkin date'];})    
+        // .key(function(d) { return d['subject'];})
         .rollup(function(leaves) { return leaves.length; }).entries(csv_data);
         // .rollup(function(d) { 
         //  return d3.sum(d, function(g) {return g.value; });
         // }).entries(csv_data);
+        // console.log(data);
 
         data.forEach(function(d) {
            d.date = parseformat(d.key);
            d.counts = d.values;
           });
-
+        
+        // console.log(data);
         // sort date
         function sortByDateAscending(a, b) {
             // Dates will be cast to numbers automagically:
