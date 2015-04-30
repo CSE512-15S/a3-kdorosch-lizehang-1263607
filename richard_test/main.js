@@ -13,6 +13,7 @@ $(document).ready(function(){
 });
 
 $(window).resize(function(){
+  lineplot.initCanvasSize();
   brush.redraw();
 });
 
