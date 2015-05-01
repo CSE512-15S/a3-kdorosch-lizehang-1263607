@@ -78,6 +78,11 @@ var brush_generator = function(){
               //d3.select(this).call(brush.extent(extent1));
 
             update_view(extent1);
+
+          start_time = extent1[0].getTime();
+          end_time = extent1[1].getTime();
+          barplot.init();
+
         })
 
     // draw chart
