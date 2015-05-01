@@ -11,8 +11,9 @@ var lineplot_generator = function(){
   };
   var color = d3.scale.category20();
 
-  var upper_time_limit = new Date(2014, 06, 01);
-  var lower_time_limit = new Date(2013, 09, 22);
+  // month number start from 0!!!
+  var upper_time_limit = new Date(2014, 06 - 1, 01);
+  var lower_time_limit = new Date(2013, 09 - 1, 22);
   var current_range = [lower_time_limit, upper_time_limit];
   var dateDiff = function(from, to) {
       var milliseconds = to - from;
@@ -25,7 +26,6 @@ var lineplot_generator = function(){
     // if not called with a time range
     if(typeof time_range !== 'undefined'){
       current_range = time_range;
-      console.log(time_range);
     }
     //TODO update stack area
      d3.select("div#lineplot svg").remove();
@@ -40,32 +40,52 @@ var lineplot_generator = function(){
       var x = d3.time.scale().range([0, width]),
           y = d3.scale.linear().range([height, 0]);  
       x.domain(current_range);
-      y.domain([0, d3.max(data.map(function(d) { return d.counts; }))]);
+      // y.domain([0, d3.max(data.map(function(d) { return d.counts; }))]);
 
       // create a area
-       var area = d3.svg.area()
-            // .interpolate("monotone")
-            .x(function(d) { return x(d.date); })
-            .y0(height)
-            .y1(function(d) {/*console.log(y(d.counts));*/return y(d.counts); });
+      var area = d3.svg.area()
+                    .interpolate("basis")
+                    .x(function(d) { return x(d.date); })
+                    .y0(function(d) { return y(d.y0); })
+                    .y1(function(d) { return y(d.y0 + d.y); });
 
-      // create SVG      
+      // create SVG 
+      var stack = d3.layout.stack()
+                    // .offset("expand")
+                    .values(function(d) { return d.values; })
+                    // .x(function(d) { return +d.key; })
+                    .y(function(d) { return d.counts; });
+
       var svg = d3.select("#lineplot")
                 .append("svg")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      // update the stack position for the data
+      stack(data);
+      // update Y axis
+      maxY = d3.max(data, function(g) {
+            return d3.max(g.values, function(y) { return y.y + y.y0; });
+        });
+      y.domain([0, maxY]);
       
-      svg.append("defs").append("clipPath")
-                        .attr("id", "clip")
-                        .append("rect")
-                        .attr("width", width)
-                        .attr("height", height);
+      var stackarea = svg.selectAll(".stackarea")
+                       .data(data)
+                       .enter().append("g")
+                       .attr("class", "stackarea");
 
-      var focus = svg.append("g")
-                  .attr("class", "focus")
-                  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      stackarea.append("path")
+          .attr("class", "area")
+          .attr("d", function(d) { return area(d.values); })
+          .style("fill", function(d) { return color(d.key); });
+
+     // svg.selectAll("path")
+     //    .data(stack(data))
+     //    .append("path")
+     //    .attr("d", function(d) { return area(d.values); })
+     //    .append("title")
+     //    .text(function(d) { return d.subject; });
 
       // Draw the xAxis text
       var days = dateDiff(current_range[0], current_range[1])
@@ -90,17 +110,7 @@ var lineplot_generator = function(){
       svg.append("g")
           .attr("class", "x grid")
 
-     
-      focus.append("path")
-           .datum(data)
-           .attr("class", "area")
-           .attr("d", area);
-
-      // focus.append("g")
-      //      .attr("class", "y axis")
-      //      .call(yAxis);
-
-      focus.append("g")
+      svg.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
           .call(xAxis);
@@ -108,52 +118,92 @@ var lineplot_generator = function(){
             
   };  
 
-  var init = function(){
+  var init = function(nday){
         var that = this;
         initCanvasSize();
         svg = d3.select("div#lineplot"); 
 
        var parseformat = d3.time.format("%d-%b-%y").parse;
-      
-      d3.csv("students_data_v2.csv", function(error, csv_data) {
+
+       // function to return to closest bin start value
+       var binTime = function(time, nday){
+        return lower_time_limit.getTime() + Math.floor(((time.getTime() - lower_time_limit.getTime()) / (nday*86400000))) * (nday*86400000);
+       }
+       d3.csv("students_data_v2.csv", function(error, csv_data) {
+       
+      // data structure:
+      // {key: math, 
+      //  value: [{key: some_date, value: counts}, {...}, {...}]}
        var data = d3.nest()
-        .key(function(d) { return d['checkin date'];})    
-        // .key(function(d) { return d['subject'];})
-        .rollup(function(leaves) { return leaves.length; }).entries(csv_data);
-        // .rollup(function(d) { 
-        //  return d3.sum(d, function(g) {return g.value; });
-        // }).entries(csv_data);
-        // console.log(data);
+                .key(function(d) { return d['subject'];})
+                .sortKeys(d3.ascending)
+                .key(function(d) { return binTime(parseformat(d['checkin date']), nday);}) 
+                .sortKeys(d3.ascending)
+                .rollup(function(leaves) { return leaves.length; })
+                .entries(csv_data);
+
+        // for stack area plot, need all keys present in data
+        // not sure what best practice to do this, make use of the time limit now
+        // para: number of days as minimum interval (only integer days now)
+        // return: numeric format, for easy comparison later
+        makeAllKeys = function(nday) {
+            allKeys = [];
+            var time_diff = (upper_time_limit - lower_time_limit) 
+            var n = time_diff / (nday * 86400000)
+            for(var i = 0; i<n;i++) {  
+                var d = new Date(lower_time_limit);
+                d.setTime(lower_time_limit.getTime() + i * nday * 86400000)
+                allKeys.push(d.getTime());
+            }
+            return allKeys;
+        }
+        // var test = makeAllKeys(1);
+        // console.log(test);
+
+        // find all dates
+        var allDates = makeAllKeys(nday);
+        console.log(allDates);
+
+        // out loop: for all subject, apply the function
+        data = data.map(function(subjObj){
+          return{
+              key: subjObj.key,
+              // inner loop: for all dates, find if in key set
+              values: allDates.map(function(m){
+                 var value = subjObj.values.filter(function(n){
+                  return (m <= n.key && m + nday * 86400000 > n.key);
+                })[0];
+                 return value || ({key: m, values: 0});
+              })
+            };
+        });
+
+        console.log(data);  
+
+        // // Sort date
+        // function sortByDateAscending(a, b) {
+        //     return a.date - b.date;
+        // }
 
         data.forEach(function(d) {
-           d.date = parseformat(d.key);
-           d.counts = d.values;
+           d.subject = d.key;
+           d.values.forEach(function(c){
+            c.date = new Date;
+            c.date.setTime(+c.key);
+            c.counts = c.values;
+           })
           });
-        
-        // console.log(data);
-        // sort date
-        function sortByDateAscending(a, b) {
-            // Dates will be cast to numbers automagically:
-            return a.date - b.date;
-        }
 
-        data = data.sort(sortByDateAscending);
+       // console.log(data[1].values[0]);
+       // console.log(data[2].values[0]);
+       // console.log(data[3].values[0]);
+       // console.log(data[4].values[0]);
+       // console.log("first day should be:" + lower_time_limit);
 
         this.data = data;
         update_view();
       });
-        // d3.csv("daysum.csv", function(error, data) {
-        //   if (error) return console.warn(error);
-        //   this.data = data;
-        //   console.log(data);
-        //   for(var i=0; i<data.length; i++) {
-        //     // data[i].subject = data[i].subject;
-        //     data[i].date = parseformat(data[i].date);
-        //     data[i].counts = +data[i].counts;
-        //   }
-
-        //   update_view();
-        // }); 
+        
   }; 
 
   return {

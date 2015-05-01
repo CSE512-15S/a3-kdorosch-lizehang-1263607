@@ -110,13 +110,9 @@ var brush_generator = function(){
   
   // function to update range of brush
   var update_view = function(range){
-    current_range = range;
-    console.log(range);
-   
+    current_range = range;   
     // update the lineplot
     lineplot.update(range);
-
-
   };
 
   // function to initiate 

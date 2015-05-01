@@ -2,15 +2,13 @@ var brush;
 
 $(document).ready(function(){
   // Fetch the current JSON we will work on;
-
-
-  SelectDimension();
   // SelectDimension();
+  SelectDimension();
   lineplot = lineplot_generator();
   brush = brush_generator();
   barplot = barplot_generator();
   
-  lineplot.init();
+  lineplot.init(7);
   brush.init();
   barplot.init();
 
