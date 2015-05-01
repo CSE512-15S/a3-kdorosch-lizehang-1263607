@@ -148,6 +148,7 @@ var brush_generator = function(){
     draw(dataset);
     // console.log(current_range);
     update_view(current_range);
+    barplot.init;
   };
 
   return {

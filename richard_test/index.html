@@ -18,6 +18,9 @@
 	<select id="dimensions" onchange="SelectDimension()">
 		<option value="subject">Subject</option>
 		<option value="s1_gender">Gender</option>
+		<option value="spcl_prog_text">Special Program</option>
+		<option value="resident">resident</option>
+		<option value="class">class</option>
 		<!-- TODO add more -->
 		<!-- TODO check spelling w/ what's used in the database -->
 	</select>
@@ -39,7 +42,11 @@
 </div>
 
 <div class="container">
-	<div id="barplot"></div>
+	<div id="barplot">
+		<svg id="barplot_svg">
+
+		</svg>
+	</div>
 </div>
 
 <!-- load jQuery -->

@@ -2,6 +2,7 @@
 	ini_set('display_errors',1);
 	error_reporting(E_ALL);
 	header('Content-Type: application/json');
+	header('Access-Control-Allow-Origin: *');
 
 	$db = new PDO("mysql:dbname=CLUE;host=localhost","root","461298");
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -25,7 +26,7 @@
 
 	$result = "[";
 	foreach ($rows as $row) {
-		$currJSON = sprintf("{\"%s\": \"%s\", \"%s\": \"%s\"},\n", $dimension, $row[1], "check_in_date", $row[2]);
+		$currJSON = sprintf("{\"%s\": \"%s\", \"%s\": \"%s\"},\n", "category", $row[1], "check_in_date", $row[2]);
 		$result = $result.$currJSON;
 	}
 	$result = substr($result, 0, strlen($result)-2);

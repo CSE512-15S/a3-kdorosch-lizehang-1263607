@@ -1,5 +1,24 @@
 var barplot_generator = function() {
     var init_funtion = function init() {
+        var dimension = Object.keys(currJSON[0])[0];
+        
+        // nesting the data
+        var nested_data = d3.nest()
+            .key(function(d) { return d.category; })
+            .entries(currJSON);
+        // console.log(nested_data);
+
+        // TODO, select according to time
+
+        var aggregated_data = [];
+        for (var i=0; i<nested_data.length;i++) {
+            var currCate = nested_data[i].key;
+            var currCount = nested_data[i].values.length;
+            aggregated_data.push({category: currCate, count: currCount});
+        }
+
+        // console.log(aggregated_data);
+
         var margin = {top: 20, right: 20, bottom: 30, left: 40},
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
@@ -18,19 +37,47 @@ var barplot_generator = function() {
                       .orient("left")
                       .ticks(10, "");
 
-        var svg = d3.select("body")
-                    .append("svg")
+        document.getElementById("barplot_svg").innerHTML = "";
+        barplot_svg = d3.select("#barplot_svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        x.domain(aggregated_data.map(function(d) { return d.category; }));
+        y.domain([0, d3.max(aggregated_data, function(d) { return d.count; })]);
+
+        barplot_svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis);
+
+        barplot_svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+          .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("count");
+
+        barplot_svg.selectAll(".bar")
+            .data(aggregated_data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) { return x(d.category); })
+            .attr("width", x.rangeBand())
+            .attr("y", function(d) { return y(d.count); })
+            .attr("height", function(d) { return height - y(d.count); })
+            .text(function(d) { return d.count; });
     };
 
-    var update_funtion = function() {
+    var barplot_update_funtion = function() {
 
     };
     return {
         init: init_funtion,
-        update: update_funtion
+        update: barplot_update_funtion
     };
 };
