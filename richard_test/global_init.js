@@ -30,10 +30,9 @@ function processData() {
 		currJSON = JSON.parse(this.responseText);
 		// .......Do something with response..........
 	}
-
 	// handle redrawing of existing bar chart
 	if (document.getElementById("barplot_svg")) {
-		// barplot.init();
+		barplot.init();
 	}
 }
 
