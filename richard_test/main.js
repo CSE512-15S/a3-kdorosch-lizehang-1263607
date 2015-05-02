@@ -10,7 +10,7 @@ $(document).ready(function(){
   
   lineplot.init(7);
   brush.init();
-  barplot.init();
+  // barplot.init();
 
   console.log(barplot);
 });

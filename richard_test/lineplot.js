@@ -97,15 +97,15 @@ var lineplot_generator = function(){
       //             .orient('left');
 
       // TODO: smart axis depending on the range of days    
-      if( days < 1000)
-       xAxis.ticks(d3.time.month, 1)
-            .tickFormat(d3.time.format('%b-%Y'));
-      if( days < 90)
-       xAxis.ticks(d3.time.week, 1)
-            .tickFormat(d3.time.format('%d-%b'));
-      if( days < 14)
-       xAxis.ticks(d3.time.day, 1)
-            .tickFormat(d3.time.format('%d-%b'));
+      // if( days < 1000)
+      //  xAxis.ticks(d3.time.month, 1)
+      //       .tickFormat(d3.time.format('%b-%Y'));
+      // if( days < 90)
+      //  xAxis.ticks(d3.time.week, 1)
+      //       .tickFormat(d3.time.format('%d-%b'));
+      // if( days < 14)
+      //  xAxis.ticks(d3.time.day, 1)
+      //       .tickFormat(d3.time.format('%d-%b'));
 
       svg.append("g")
           .attr("class", "x grid")
@@ -129,7 +129,7 @@ var lineplot_generator = function(){
        var binTime = function(time, nday){
         return lower_time_limit.getTime() + Math.floor(((time.getTime() - lower_time_limit.getTime()) / (nday*86400000))) * (nday*86400000);
        }
-       d3.csv("students_data_v2.csv", function(error, csv_data) {
+       d3.csv("students_data_v4.csv", function(error, csv_data) {
        
       // data structure:
       // {key: math, 
