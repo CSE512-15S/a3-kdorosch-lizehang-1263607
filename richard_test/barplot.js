@@ -1,9 +1,9 @@
 var barplot_generator = function() {
-    var init_funtion = function init() {
+    var init_function = function init() {
         $("#barplot_svg").empty();
         var dimension = Object.keys(currJSON[0])[0];
         var filtered_data = [];
-        // TODO, select according to time
+
         for (var i=0; i<currJSON.length; i++) {
             var currTime = new Date(currJSON[i].check_in_date).getTime();
             if (currTime<=end_time && currTime>=start_time) {
@@ -28,9 +28,10 @@ var barplot_generator = function() {
         }
 
         // console.log(aggregated_data);
+        var color = d3.scale.category20();
 
-        var margin = {top: 20, right: 20, bottom: 30, left: 40},
-        width = 960 - margin.left - margin.right,
+        var margin = {top: 0, right: 10, bottom: 0, left: 40},
+        width = 300 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
         var x = d3.scale.ordinal()
                   .rangeRoundBands([0, width], 0.1);
@@ -54,7 +55,9 @@ var barplot_generator = function() {
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         x.domain(aggregated_data.map(function(d) { return d.category; }));
-        y.domain([0, 7000]);
+        var ymax = d3.max(aggregated_data, function(d) {return d.count});
+        y.domain([0, 1.1*ymax]);
+
         // d3.max(aggregated_data, function(d) { return d.count; })
         // To fix axis range
 
@@ -76,19 +79,19 @@ var barplot_generator = function() {
         var bar = barplot_svg.selectAll(".bar")
             .data(aggregated_data)
             .enter().append("rect")
-            .attr("fill", "teal")
             .attr("class", "bar")
             .attr("x", function(d) { return x(d.category); })
             .attr("width", x.rangeBand())
             .attr("y", function(d) { return y(d.count); })
+            .style("fill", function(d) { return color(d.category); })
             .attr("height", function(d) { return height - y(d.count); });
     };
 
-    var barplot_update_funtion = function() {
+    var barplot_update_function = function() {
 
     };
     return {
-        init: init_funtion,
-        update: barplot_update_funtion
+        init: init_function,
+        update: barplot_update_function
     };
 };

@@ -12,7 +12,7 @@ $(document).ready(function(){
   brush.init();
   barplot.init();
 
-  console.log(barplot);
+  //console.log(barplot);
 });
 
 $(window).resize(function(){

@@ -17,7 +17,6 @@ div.bar {
 		width: 20px;
 		height: 75px;	/* Gets overriden by D3-assigned height below */
 		margin-right: 2px;
-		background-color: teal;
 	}
 
 /* Style of the x-axis line */
@@ -72,7 +71,16 @@ div.bar {
 	position: absolute;
 	width: auto;
 	height: auto;
-	left: 700px;
+	left: 400px;
+	top: 100px;
+	/*TODO need to fill in position here*/
+}
+
+#barplot {
+	position: absolute;
+	width: auto;
+	height: auto;
+	left: 600px;
 	top: 100px;
 	/*TODO need to fill in position here*/
 }

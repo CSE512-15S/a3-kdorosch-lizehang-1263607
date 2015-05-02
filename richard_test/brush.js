@@ -2,17 +2,17 @@
 var brush_generator = function(){
   
   // svg attributes
-  var margin = {top: 20, right: 10, bottom: 20, left: 40},
+  var margin = {top: 20, right: 20, bottom: 0, left: 40},
         canvas_width,
-        w,
+        w = 550 - margin.left - margin.right;
         h = 60;
         barPadding = 1;
         // height2 = 500 - margin2.top - margin2.bottom;
 
-  var initCanvasSize = function(){
-      canvas_width = +(d3.select('#brush').style('width').replace('px', ''));
-      w = canvas_width - margin.left - margin.right;
-  };
+  // var initCanvasSize = function(){
+  //     canvas_width = +(d3.select('#brush').style('width').replace('px', ''));
+  //     w = canvas_width - margin.left - margin.right;
+  // };
 
   // parse time from format in JSON
   var parseformat = d3.time.format("%Y-%m-%d");
@@ -20,6 +20,7 @@ var brush_generator = function(){
   var lower_time_limit = new Date(2013, 08, 22);
 
   var dataset = [];
+  var color = d3.scale.category20();
 
   // function to draw the brush area
   var draw = function(dataset){
@@ -127,7 +128,7 @@ var brush_generator = function(){
 
   // function to initiate 
   var init = function(){
-    initCanvasSize();
+    //initCanvasSize();
       // read in static data tables 
       var parseformat = d3.time.format("%d-%b-%y").parse;
       d3.csv("weeksum.csv", function(data){
@@ -145,7 +146,7 @@ var brush_generator = function(){
   // function to redraw brush
   var redraw = function(){
     d3.select("div#brush svg").remove();
-    initCanvasSize();
+    //initCanvasSize();
     draw(dataset);
     // console.log(current_range);
     update_view(current_range);
