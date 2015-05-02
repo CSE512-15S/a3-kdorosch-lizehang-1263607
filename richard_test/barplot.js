@@ -1,14 +1,24 @@
 var barplot_generator = function() {
     var init_funtion = function init() {
         var dimension = Object.keys(currJSON[0])[0];
-        
+
+        var filtered_data = [];
+        // TODO, select according to time
+        for (var i=0; i<currJSON.length; i++) {
+            var currTime = new Date(currJSON[i].check_in_date).getTime();
+            if (currTime<=end_time && currTime>=start_time) {
+                filtered_data.push(currJSON[i]);
+            }
+        }
+
+        // console.log(start_time);
+        // console.log(end_time);        
         // nesting the data
         var nested_data = d3.nest()
             .key(function(d) { return d.category; })
-            .entries(currJSON);
-        // console.log(nested_data);
+            .entries(filtered_data);
 
-        // TODO, select according to time
+        // console.log(nested_data);
 
         var aggregated_data = [];
         for (var i=0; i<nested_data.length;i++) {
@@ -45,7 +55,8 @@ var barplot_generator = function() {
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         x.domain(aggregated_data.map(function(d) { return d.category; }));
-        y.domain([0, d3.max(aggregated_data, function(d) { return d.count; })]);
+        y.domain([0, 7000]);
+        // d3.max(aggregated_data, function(d) { return d.count; })
 
         barplot_svg.append("g")
             .attr("class", "x axis")
@@ -65,6 +76,7 @@ var barplot_generator = function() {
         barplot_svg.selectAll(".bar")
             .data(aggregated_data)
             .enter().append("rect")
+            .attr("fill", "teal")
             .attr("class", "bar")
             .attr("x", function(d) { return x(d.category); })
             .attr("width", x.rangeBand())
