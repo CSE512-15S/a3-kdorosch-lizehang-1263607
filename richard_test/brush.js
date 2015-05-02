@@ -16,7 +16,7 @@ var brush_generator = function(){
 
   // parse time from format in JSON
   var parseformat = d3.time.format("%Y-%m-%d");
-  var upper_time_limit = new Date(2014, 06, 01);
+  var upper_time_limit = new Date(2014, 05, 01);
   var lower_time_limit = new Date(2013, 08, 22);
 
   var dataset = [];
@@ -31,23 +31,25 @@ var brush_generator = function(){
                 .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
   
             
-    var time_range = [d3.min(dataset, function(d){return d.time;}), 
-                      d3.max(dataset, function(d){return d.time;}), ];
+    // var time_range = [d3.min(dataset, function(d){return d.time;}), 
+    //                   d3.max(dataset, function(d){return d.time;}), ];
 
+    var time_range = [lower_time_limit, upper_time_limit];
     var count_range = [d3.min(dataset, function(d) { return d.counts; }),
                         d3.max(dataset, function(d) { return d.counts; })];
     // D3 smart scale                    
-    var yScale = d3.scale.linear()
-                         .domain(count_range)
-                         .range([0.05*h,h])
-                         .nice();
-    var tScale = d3.time.scale()
-                        .domain(time_range)
-                        // .nice()
-                        .range([0,w]);
+    var yScale = d3.scale.linear() .domain(count_range) .range([h,0]);
+    var xScale = d3.time.scale()
+                    .range([0, w])
+                    .domain(time_range);
+    var xAxis = d3.svg.axis()
+                  .scale(xScale)
+                  .orient('bottom');
+    xAxis.ticks(d3.time.month, 1)
+            .tickFormat(d3.time.format('%b-%Y'));
     // brush
     var brush = d3.svg.brush()
-        .x(tScale)
+        .x(xScale)
         .extent([lower_time_limit, upper_time_limit])
         .on("brushend", function() {
           // handle the period before the brush stops 
@@ -81,22 +83,25 @@ var brush_generator = function(){
         })
 
     // draw chart
-    svg.selectAll("rect")
-      .data(dataset)
-      .enter()
-      .append("rect")
-      .attr({
-          x: function(d, i) { return i* (w/dataset.length);},
-          y: function(d) { return h - yScale(d.counts);},
-          width: w / dataset.length - barPadding,
-          height: function(d) { return yScale(d.counts);},
-          fill: "royalblue"
-      })   
-     
-     //TODO grid etc.
+    var area = d3.svg.area()
+                .interpolate("basis")
+                .x(function(d){return xScale(d.date);})
+                // .x(function(d, i) { return i* (w/dataset.length);})
+                .y0(h)
+                .y1(function(d) {return yScale(d.counts); });
+    
+    svg.append("path")
+      .datum(dataset)
+      .attr("class", "area")
+      .attr("d", area)
+      .attr("fill", '#aec7e8');
 
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + h + ")")
+      .call(xAxis);
 
-     var gBrush = svg.append("g")
+    var gBrush = svg.append("g")
       .attr("class", "brush")
       .call(brush)
       .call(brush.event);
@@ -124,17 +129,12 @@ var brush_generator = function(){
       dataset = data.map(function(d) {
         return {
           // time: Date.parse(d['week']), 
-          time: parseformat(d['week']),
+          date: parseformat(d['week']),
           counts: +d.counts
         }
       });
-      // console.log(dataset);
       draw(dataset);
     });
-
-    // read data
-    // TODO: finish here
-    // d3.csv() or d3.json()
   };
 
   // function to redraw brush

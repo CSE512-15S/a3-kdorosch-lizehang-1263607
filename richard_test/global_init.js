@@ -30,7 +30,7 @@ function processData() {
 
 	// handle redrawing of existing bar chart
 	if (document.getElementById("barplot_svg")) {
-		barplot.init();
+		// barplot.init();
 	}
 }
 
