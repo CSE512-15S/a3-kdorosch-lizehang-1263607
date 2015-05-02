@@ -129,7 +129,7 @@ var lineplot_generator = function(){
        var binTime = function(time, nday){
         return lower_time_limit.getTime() + Math.floor(((time.getTime() - lower_time_limit.getTime()) / (nday*86400000))) * (nday*86400000);
        }
-       d3.csv("students_data_v3.csv", function(error, csv_data) {
+       d3.csv("students_data_v4.csv", function(error, csv_data) {
        
       // data structure:
       // {key: math, 
@@ -202,10 +202,6 @@ var lineplot_generator = function(){
 
         this.data = data;
         update_view();
-        // update bar plot
-        start_time = extent1[0].getTime();
-        end_time = extent1[1].getTime();
-        barplot.init();
       });
         
   }; 
