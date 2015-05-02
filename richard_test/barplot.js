@@ -1,7 +1,7 @@
 var barplot_generator = function() {
     var init_funtion = function init() {
         var dimension = Object.keys(currJSON[0])[0];
-
+        $("#barplot_svg").fadeOut().delay(1500).empty();
         var filtered_data = [];
         // TODO, select according to time
         for (var i=0; i<currJSON.length; i++) {
@@ -47,7 +47,6 @@ var barplot_generator = function() {
                       .orient("left")
                       .ticks(10, "");
 
-        document.getElementById("barplot_svg").innerHTML = "";
         barplot_svg = d3.select("#barplot_svg")
                     .attr("width", width + margin.left + margin.right)
                     .attr("height", height + margin.top + margin.bottom)
@@ -57,6 +56,7 @@ var barplot_generator = function() {
         x.domain(aggregated_data.map(function(d) { return d.category; }));
         y.domain([0, 7000]);
         // d3.max(aggregated_data, function(d) { return d.count; })
+        // To fix axis range
 
         barplot_svg.append("g")
             .attr("class", "x axis")
@@ -66,14 +66,14 @@ var barplot_generator = function() {
         barplot_svg.append("g")
             .attr("class", "y axis")
             .call(yAxis)
-          .append("text")
+            .append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", 6)
             .attr("dy", ".71em")
             .style("text-anchor", "end")
             .text("count");
 
-        barplot_svg.selectAll(".bar")
+        var bar = barplot_svg.selectAll(".bar")
             .data(aggregated_data)
             .enter().append("rect")
             .attr("fill", "teal")
@@ -81,8 +81,18 @@ var barplot_generator = function() {
             .attr("x", function(d) { return x(d.category); })
             .attr("width", x.rangeBand())
             .attr("y", function(d) { return y(d.count); })
-            .attr("height", function(d) { return height - y(d.count); })
+            .attr("height", function(d) { return height - y(d.count); });
+
+        barplot_svg.append("text")
+            .data(aggregated_data)
+            .attr("x", x.rangeBand() / 2)
+            .attr("y", function(d) { return d.count; })
+            .attr("class", "bartext")
+            .attr("text-anchor", "middle")
+            .attr("fill", "white")
+            .attr("dy", ".75em")
             .text(function(d) { return d.count; });
+        $("#barplot_svg").fadeIn().delay(1500);
     };
 
     var barplot_update_funtion = function() {
