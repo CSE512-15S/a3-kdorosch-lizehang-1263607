@@ -1,7 +1,7 @@
 var barplot_generator = function() {
     var init_funtion = function init() {
+        $("#barplot_svg").empty();
         var dimension = Object.keys(currJSON[0])[0];
-        $("#barplot_svg").fadeOut().delay(1500).empty();
         var filtered_data = [];
         // TODO, select according to time
         for (var i=0; i<currJSON.length; i++) {
@@ -82,17 +82,6 @@ var barplot_generator = function() {
             .attr("width", x.rangeBand())
             .attr("y", function(d) { return y(d.count); })
             .attr("height", function(d) { return height - y(d.count); });
-
-        barplot_svg.append("text")
-            .data(aggregated_data)
-            .attr("x", x.rangeBand() / 2)
-            .attr("y", function(d) { return d.count; })
-            .attr("class", "bartext")
-            .attr("text-anchor", "middle")
-            .attr("fill", "white")
-            .attr("dy", ".75em")
-            .text(function(d) { return d.count; });
-        $("#barplot_svg").fadeIn().delay(1500);
     };
 
     var barplot_update_funtion = function() {
