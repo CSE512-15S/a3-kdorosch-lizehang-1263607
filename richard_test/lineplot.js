@@ -1,14 +1,14 @@
 var lineplot_generator = function(){
-  var margin = {top: 50, right: 10, bottom: 100, left: 40},
+  var margin = {top: 0, right: 10, bottom: 0, left: 40},
       height = 500 - margin.top - margin.bottom,
       cell_height = 40,
       canvas_width,
-      width = 960 - margin.left - margin.right;
+      width = 550 - margin.left - margin.right;
   
-  var initCanvasSize = function(){
-      canvas_width = +(d3.select('#lineplot').style('width').replace('px', ''));
-      width = canvas_width - margin.left - margin.right;
-  };
+  // var initCanvasSize = function(){
+  //     canvas_width = +(d3.select('#lineplot').style('width').replace('px', ''));
+  //     width = canvas_width - margin.left - margin.right;
+  // };
   var color = d3.scale.category20();
 
   // month number start from 0!!!
@@ -120,7 +120,7 @@ var lineplot_generator = function(){
 
   var init = function(nday){
         var that = this;
-        initCanvasSize();
+        //initCanvasSize();
         svg = d3.select("div#lineplot"); 
 
        var parseformat = d3.time.format("%d-%b-%y").parse;
@@ -162,7 +162,7 @@ var lineplot_generator = function(){
 
         // find all dates
         var allDates = makeAllKeys(nday);
-        console.log(allDates);
+        //console.log(allDates);
 
         // out loop: for all subject, apply the function
         data = data.map(function(subjObj){
@@ -178,7 +178,7 @@ var lineplot_generator = function(){
             };
         });
 
-        console.log(data);  
+        //console.log(data);  
 
         // // Sort date
         // function sortByDateAscending(a, b) {
@@ -208,7 +208,7 @@ var lineplot_generator = function(){
 
   return {
     init: init,
-    initCanvasSize: initCanvasSize,
+    // initCanvasSize: initCanvasSize,
     update: update_view
   }; 
 };

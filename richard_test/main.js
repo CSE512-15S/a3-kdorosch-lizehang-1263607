@@ -15,8 +15,8 @@ $(document).ready(function(){
   //console.log(barplot);
 });
 
-$(window).resize(function(){
-  lineplot.initCanvasSize();
-  brush.redraw();
-});
+// $(window).resize(function(){
+//   lineplot.initCanvasSize();
+//   brush.redraw();
+// });
 

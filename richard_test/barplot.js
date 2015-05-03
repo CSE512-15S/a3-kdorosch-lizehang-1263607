@@ -30,7 +30,15 @@ var barplot_generator = function() {
         // console.log(aggregated_data);
         var color = d3.scale.category20();
 
-        var margin = {top: 0, right: 10, bottom: 0, left: 40},
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+                console.log("category is: " + d.category);
+                return "<strong><span style='color:red'>" + d.category + "</span></strong>";
+            })
+
+        var margin = {top: 0, right: 10, bottom: 25, left: 40},
         width = 300 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
         var x = d3.scale.ordinal()
@@ -58,8 +66,9 @@ var barplot_generator = function() {
         var ymax = d3.max(aggregated_data, function(d) {return d.count});
         y.domain([0, 1.1*ymax]);
 
-        // d3.max(aggregated_data, function(d) { return d.count; })
-        // To fix axis range
+        console.log("before");
+        barplot_svg.call(tip);
+        console.log("after");
 
         barplot_svg.append("g")
             .attr("class", "x axis")
@@ -85,6 +94,10 @@ var barplot_generator = function() {
             .attr("y", function(d) { return y(d.count); })
             .style("fill", function(d) { return color(d.category); })
             .attr("height", function(d) { return height - y(d.count); });
+            // .on('mouseover', tip.show)
+            // .on('mouseout', tip.hide);
+
+
     };
 
     var barplot_update_function = function() {
