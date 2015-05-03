@@ -3,9 +3,18 @@ var barplot_generator = function() {
         $("#barplot_svg").empty();
         var dimension = Object.keys(currJSON[0])[0];
         var filtered_data = [];
+        var parseformat = d3.time.format("%Y-%m-%d").parse;
+       
+        // for some reason the new Date works not properly for me
+        // example:
+        // currJSON[1].check_in_date
+        // "2014-02-23"
+        // new Date(currJSON[1].check_in_date)
+        // Sat Feb 22 2014 16:00:00 GMT-0800 (PST) 
 
         for (var i=0; i<currJSON.length; i++) {
-            var currTime = new Date(currJSON[i].check_in_date).getTime();
+            // var currTime = new Date(currJSON[i].check_in_date).getTime();
+            var currTime = parseformat(currJSON[i].check_in_date).getTime();
             if (currTime<=end_time && currTime>=start_time) {
                 filtered_data.push(currJSON[i]);
             }
