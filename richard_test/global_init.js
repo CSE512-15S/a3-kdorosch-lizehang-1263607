@@ -14,7 +14,7 @@ function SelectDimension() {
 		dimension = "subject";
 	}
 	
-	// That's the JSON server I set up	
+	// Talk to the JSON server
 	var remote = "http://107.170.209.163/CSE512/left_graph.php?q=" + dimension;
 	var request = new XMLHttpRequest();
 	request.open("GET", remote, false);
@@ -26,12 +26,11 @@ function SelectDimension() {
 	// function to be fired when we fetched the data.
 function processData() {
 	if (this.status == 200) {   // 200 stands for we received a file
-		// response here will be a JSON object
 		currJSON = JSON.parse(this.responseText);
-		// .......Do something with response..........
 	}
 	// handle redrawing of existing bar chart
 	if (document.getElementById("barplot_svg")) {
+		//TODO is this actually doing anything? - kd
 		barplot.init();
 		lineplot.init(7);
 	}

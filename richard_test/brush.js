@@ -2,7 +2,7 @@
 var brush_generator = function(){
   
   // svg attributes
-  var margin = {top: 20, right: 20, bottom: 0, left: 40},
+  var margin = {top: 0, right: 20, bottom: 0, left: 40},
         canvas_width,
         w = 550 - margin.left - margin.right;
         h = 60;

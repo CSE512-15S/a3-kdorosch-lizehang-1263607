@@ -1,5 +1,5 @@
 var lineplot_generator = function(){
-  var margin = {top: 0, right: 10, bottom: 0, left: 40},
+  var margin = {top: 20, right: 10, bottom: 20, left: 40},
       height = 500 - margin.top - margin.bottom,
       cell_height = 40,
       canvas_width,
@@ -32,6 +32,9 @@ var lineplot_generator = function(){
      var xScale = d3.time.scale()
                     .range([0, width])
                     .domain(current_range);
+      var yScale = d3.scale.linear()
+                  .range([height, 0]);
+
      // var yScale = d3.scale.linear()
      //                .domain([0, d3.max(data.map(function(d) { return d.counts; }))]) 
      //                .nice();
@@ -92,6 +95,12 @@ var lineplot_generator = function(){
       var xAxis = d3.svg.axis()
                   .scale(xScale)
                   .orient('bottom');
+
+      var yAxis = d3.svg.axis()
+                  .scale(y)
+                  .orient("left")
+                  .ticks(10, "");
+
       // var yAxis = d3.svg.axis()
       //             .scale(yScale)
       //             .orient('left');
@@ -115,6 +124,16 @@ var lineplot_generator = function(){
           .attr("transform", "translate(0," + height + ")")
           .call(xAxis);
 
+
+      svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end")
+            .text("count");
             
   };  
 

@@ -47,7 +47,7 @@ var barplot_generator = function() {
                 return "<strong><span style='color:red'>" + d.category + "</span></strong>";
             })
 
-        var margin = {top: 0, right: 10, bottom: 25, left: 40},
+        var margin = {top: 20, right: 10, bottom: 100, left: 40},
         width = 300 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
         var x = d3.scale.ordinal()
@@ -82,7 +82,13 @@ var barplot_generator = function() {
         barplot_svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+            .call(xAxis)
+                .selectAll("text")  
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", function(d) {
+                    return "rotate(-65)";});
 
         barplot_svg.append("g")
             .attr("class", "y axis")
