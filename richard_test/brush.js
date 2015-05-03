@@ -2,9 +2,9 @@
 var brush_generator = function(){
   
   // svg attributes
-  var margin = {top: 0, right: 20, bottom: 0, left: 40},
+  var margin = {top: 0, right: 0, bottom: 20, left: 40},
         canvas_width,
-        w = 550 - margin.left - margin.right;
+        w = 510 - margin.left - margin.right;
         h = 60;
         barPadding = 1;
         // height2 = 500 - margin2.top - margin2.bottom;
@@ -43,11 +43,7 @@ var brush_generator = function(){
     var xScale = d3.time.scale()
                     .range([0, w])
                     .domain(time_range);
-    var xAxis = d3.svg.axis()
-                  .scale(xScale)
-                  .orient('bottom');
-    xAxis.ticks(d3.time.month, 1)
-            .tickFormat(d3.time.format('%b-%Y'));
+
     // brush
     var brush = d3.svg.brush()
         .x(xScale)
@@ -92,7 +88,6 @@ var brush_generator = function(){
     var area = d3.svg.area()
                 .interpolate("basis")
                 .x(function(d){return xScale(d.date);})
-                // .x(function(d, i) { return i* (w/dataset.length);})
                 .y0(h)
                 .y1(function(d) {return yScale(d.counts); });
     
@@ -102,10 +97,22 @@ var brush_generator = function(){
       .attr("d", area)
       .attr("fill", '#aec7e8');
 
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + h + ")")
-      .call(xAxis);
+     var xAxis = d3.svg.axis()
+                  .scale(xScale)
+                  .orient('bottom');
+      var yAxis = d3.svg.axis()
+                  .scale(yScale)
+                  .orient('left')
+                  .ticks(3);
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + h + ")")
+          .call(xAxis);
+
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
 
     var gBrush = svg.append("g")
       .attr("class", "brush")

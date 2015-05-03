@@ -11,7 +11,7 @@ var barplot_generator = function() {
         // "2014-02-23"
         // new Date(currJSON[1].check_in_date)
         // Sat Feb 22 2014 16:00:00 GMT-0800 (PST) 
-
+        
         for (var i=0; i<currJSON.length; i++) {
             // var currTime = new Date(currJSON[i].check_in_date).getTime();
             var currTime = parseformat(currJSON[i].check_in_date).getTime();
@@ -25,6 +25,7 @@ var barplot_generator = function() {
         // nesting the data
         var nested_data = d3.nest()
             .key(function(d) { return d.category; })
+            .sortKeys(d3.ascending)
             .entries(filtered_data);
 
         // console.log(nested_data);
@@ -37,7 +38,8 @@ var barplot_generator = function() {
         }
 
         // console.log(aggregated_data);
-        var color = d3.scale.category20();
+        var color = d3.scale.category20c();
+        color.domain(category_domain);
 
         var tip = d3.tip()
             .attr('class', 'd3-tip')
