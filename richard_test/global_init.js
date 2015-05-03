@@ -8,6 +8,9 @@ var end_time = new Date(2014, 09 - 1, 22).getTime();
 
 function SelectDimension() {
 	// dimension could be "subject", "s1_gender", "class", "location", "spcl_prog_text" and "resident"
+
+	// TODO remove "anything goes" and "writing center" from subject
+	//      remove large class year? (numbers > 10 break the order of levels)
 	if (document.getElementById("dimensions")) {
 		dimension = document.getElementById("dimensions").value;	
 	} else {

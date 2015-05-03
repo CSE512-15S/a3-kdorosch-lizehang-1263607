@@ -128,28 +128,30 @@ var lineplot_generator = function(){
         // .style("text-anchor", "end")
         // .text("count");
 
+      // define number of levels
       var nlevel = data.length;  
+      // define maximum legend height
+      var maxBlockheight = 21;
+
       var legend = svg.selectAll(".legend")
                       .data(data)
                       .enter().append("g")
                       .attr("class", "legend")
-                      .attr("transform", function(d, i) { return "translate(0," + i * height/nlevel + ")"; });
+                      .attr("transform", function(d, i) { return "translate(0," + i * Math.min(height / nlevel, maxBlockheight) + ")"; });
       
-      // define maximum legend height
-      var maxBlockheight = 21;
 
       legend.append("rect")
           .attr("x", width - 20)
-          .attr("width", Math.max(height / nlevel, maxBlockheight))
-          .attr("height", Math.max(height / nlevel, maxBlockheight))
+          .attr("width", Math.min(height / nlevel, maxBlockheight))
+          .attr("height", Math.min(height / nlevel, maxBlockheight))
           .style("fill", function(d) { return color(d.key); });
 
-      var totalY = nlevel * Math.max(height / nlevel, maxBlockheight);
+      var totalY = nlevel * Math.min(height / nlevel, maxBlockheight);
 
       legend.append("text")
-          .attr("x", (width + Math.max(height / nlevel, maxBlockheight)))
+          .attr("x", (width + Math.min(height / nlevel, maxBlockheight)))
           .attr("dx", -18)
-          .attr("y", Math.max(height / nlevel, maxBlockheight))
+          .attr("y", Math.min(height / nlevel, maxBlockheight))
           .attr("dy", -10)
           .attr("font-family", "sans-serif")
           .attr("font-size", "13px")

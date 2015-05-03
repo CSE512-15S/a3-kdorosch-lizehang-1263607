@@ -39,7 +39,7 @@ var barplot_generator = function() {
 
         // console.log(aggregated_data);
         var color = d3.scale.category20c();
-        color.domain(d3.keys(data));
+        color.domain(d3.keys(nested_data));
 
         var margin = {top: 0, right: 10, bottom: 0, left: 40},
         width = 300 - margin.left - margin.right,
