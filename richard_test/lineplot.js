@@ -96,7 +96,7 @@ var lineplot_generator = function(){
       //             .scale(yScale)
       //             .orient('left');
 
-      // TODO: smart axis depending on the range of days    
+      // smart axis depending on the range of days    
       // if( days < 1000)
       //  xAxis.ticks(d3.time.month, 1)
       //       .tickFormat(d3.time.format('%b-%Y'));
@@ -119,29 +119,38 @@ var lineplot_generator = function(){
   };  
 
   var init = function(nday){
+<<<<<<< HEAD
         var that = this;
         //initCanvasSize();
         svg = d3.select("div#lineplot"); 
+=======
+      // var that = this;
+      $("#lineplot").empty();
+      initCanvasSize();
+      svg = d3.select("div#lineplot"); 
+>>>>>>> 36e1b0fc2b1c2a500ceb49e5d5ca7981b9ee4216
 
-       var parseformat = d3.time.format("%d-%b-%y").parse;
+      var parseformat = d3.time.format("%Y-%m-%d").parse;
 
-       // function to return to closest bin start value
-       var binTime = function(time, nday){
+
+      // function to return to closest bin start value
+      var binTime = function(time, nday){
         return lower_time_limit.getTime() + Math.floor(((time.getTime() - lower_time_limit.getTime()) / (nday*86400000))) * (nday*86400000);
-       }
-       d3.csv("students_data_v4.csv", function(error, csv_data) {
+      }
+      // d3.csv("students_data_v4.csv", function(error, csv_data) {
        
       // data structure:
       // {key: math, 
       //  value: [{key: some_date, value: counts}, {...}, {...}]}
-       var data = d3.nest()
-                .key(function(d) { return d['subject'];})
+       data = d3.nest()
+                .key(function(d) { return d.category;})
                 .sortKeys(d3.ascending)
-                .key(function(d) { return binTime(parseformat(d['checkin date']), nday);}) 
+                .key(function(d) { return binTime(parseformat(d.check_in_date), nday);}) 
                 .sortKeys(d3.ascending)
                 .rollup(function(leaves) { return leaves.length; })
-                .entries(csv_data);
-
+                .entries(currJSON);
+                // .entries(csv_data);
+        console.log(data);
         // for stack area plot, need all keys present in data
         // not sure what best practice to do this, make use of the time limit now
         // para: number of days as minimum interval (only integer days now)
@@ -202,7 +211,7 @@ var lineplot_generator = function(){
 
         this.data = data;
         update_view();
-      });
+      // });
         
   }; 
 

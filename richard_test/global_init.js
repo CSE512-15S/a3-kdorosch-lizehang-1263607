@@ -32,8 +32,8 @@ function processData() {
 	}
 	// handle redrawing of existing bar chart
 	if (document.getElementById("barplot_svg")) {
-		//TODO this doesnt seem to do anything... -kd
-		//barplot.init();
+		barplot.init();
+		lineplot.init(7);
 	}
 }
 
