@@ -1,5 +1,5 @@
 var lineplot_generator = function(){
-  var margin = {top: 50, right: 160, bottom: 100, left: 40},
+  var margin = {top: 50, right: 160, bottom: 40, left: 40},
       height = 500 - margin.top - margin.bottom,
       cell_height = 40,
       canvas_width,
@@ -7,7 +7,7 @@ var lineplot_generator = function(){
   
   var initCanvasSize = function(){
       canvas_width = +(d3.select('#lineplot').style('width').replace('px', ''));
-      width = canvas_width - margin.left - margin.right;
+      width = (canvas_width - margin.left - margin.right) * 0.6;
   };
   var color = d3.scale.category20c();
 
@@ -27,15 +27,13 @@ var lineplot_generator = function(){
     if(typeof time_range !== 'undefined'){
       current_range = time_range;
     }
-    
-     d3.select("div#lineplot svg").remove();
-     var xScale = d3.time.scale()
-                    .range([0, width])
-                    .domain(current_range);
-     var yScale = d3.scale.linear()
-                    .domain([0, d3.max(data.map(function(d) { return d.counts; }))]) 
-                    .nice();
-       
+    var days = dateDiff(current_range[0], current_range[1]);
+    if( days < 60){
+      update_data(1);
+    }else{
+      update_data(7);
+    }
+     d3.select("div#lineplot svg").remove();       
       // tell scale function the domain         
       var x = d3.time.scale().range([0, width]),
           y = d3.scale.linear().range([height, 0]);  
@@ -91,12 +89,11 @@ var lineplot_generator = function(){
       // Draw the xAxis text
       var days = dateDiff(current_range[0], current_range[1])
       var xAxis = d3.svg.axis()
-                  .scale(xScale)
+                  .scale(x)
                   .orient('bottom');
       var yAxis = d3.svg.axis()
-                  .scale(yScale)
-                  .orient('left')                      
-                  .ticks(10, "");
+                  .scale(y)
+                  .orient('left');
 
 
       // smart axis depending on the range of days    
@@ -110,8 +107,6 @@ var lineplot_generator = function(){
       //  xAxis.ticks(d3.time.day, 1)
       //       .tickFormat(d3.time.format('%d-%b'));
 
-      svg.append("g")
-          .attr("class", "x grid")
 
       svg.append("g")
           .attr("class", "x axis")
@@ -120,48 +115,51 @@ var lineplot_generator = function(){
 
       svg.append("g")
         .attr("class", "y axis")
-        .call(yAxis);
-        // .append("text")
-        // .attr("transform", "rotate(-90)")
-        // .attr("y", 6)
-        // .attr("dy", ".71em")
-        // .style("text-anchor", "end")
-        // .text("count");
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("count");
 
       // define number of levels
       var nlevel = data.length;  
       // define maximum legend height
-      var maxBlockheight = 21;
+      var maxBlockheight = 25;
+      // define all categories in reverse order
+      var categories = [];
+      data.forEach(function(d){categories.push(d.key)});
+      categories.reverse();
 
       var legend = svg.selectAll(".legend")
-                      .data(data)
+                      .data(categories)
                       .enter().append("g")
                       .attr("class", "legend")
                       .attr("transform", function(d, i) { return "translate(0," + i * Math.min(height / nlevel, maxBlockheight) + ")"; });
       
 
       legend.append("rect")
-          .attr("x", width - 20)
+          .attr("x", width - 10)
           .attr("width", Math.min(height / nlevel, maxBlockheight))
           .attr("height", Math.min(height / nlevel, maxBlockheight))
-          .style("fill", function(d) { return color(d.key); });
+          .style("fill", function(d) { return color(d); });
 
       var totalY = nlevel * Math.min(height / nlevel, maxBlockheight);
 
       legend.append("text")
           .attr("x", (width + Math.min(height / nlevel, maxBlockheight)))
-          .attr("dx", -18)
+          .attr("dx", -10)
           .attr("y", Math.min(height / nlevel, maxBlockheight))
-          .attr("dy", -10)
+          .attr("dy", -7)
           .attr("font-family", "sans-serif")
           .attr("font-size", "13px")
           .style("text-anchor", "start")
-          .text(function(d) { return d.key; });  
+          .text(function(d) { return d; });  
 
             
   };  
-
-  var init = function(nday){
+   var update_data = function(nday){
       // var that = this;
       $("#lineplot").empty();
       initCanvasSize();
@@ -245,6 +243,11 @@ var lineplot_generator = function(){
        // console.log("first day should be:" + lower_time_limit);
 
         this.data = data;
+      // });
+        
+  }; 
+  var init = function(nday){
+        update_data(7);
         update_view();
       // });
         

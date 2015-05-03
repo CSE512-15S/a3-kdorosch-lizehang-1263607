@@ -2,17 +2,17 @@
 var brush_generator = function(){
   
   // svg attributes
-  var margin = {top: 20, right: 20, bottom: 0, left: 40},
+  var margin = {top: 0, right: 160, bottom: 20, left: 40},
         canvas_width,
-        w = 550 - margin.left - margin.right;
+        w = 960 - margin.left - margin.right;
         h = 60;
         barPadding = 1;
         // height2 = 500 - margin2.top - margin2.bottom;
 
-  // var initCanvasSize = function(){
-  //     canvas_width = +(d3.select('#brush').style('width').replace('px', ''));
-  //     w = canvas_width - margin.left - margin.right;
-  // };
+  var initCanvasSize = function(){
+      canvas_width = +(d3.select('#brush').style('width').replace('px', ''));
+      w = (canvas_width - margin.left - margin.right) * 0.6;
+  };
 
   // parse time from format in JSON
   var parseformat = d3.time.format("%Y-%m-%d");
@@ -43,11 +43,7 @@ var brush_generator = function(){
     var xScale = d3.time.scale()
                     .range([0, w])
                     .domain(time_range);
-    var xAxis = d3.svg.axis()
-                  .scale(xScale)
-                  .orient('bottom');
-    xAxis.ticks(d3.time.month, 1)
-            .tickFormat(d3.time.format('%b-%Y'));
+
     // brush
     var brush = d3.svg.brush()
         .x(xScale)
@@ -92,7 +88,6 @@ var brush_generator = function(){
     var area = d3.svg.area()
                 .interpolate("basis")
                 .x(function(d){return xScale(d.date);})
-                // .x(function(d, i) { return i* (w/dataset.length);})
                 .y0(h)
                 .y1(function(d) {return yScale(d.counts); });
     
@@ -102,10 +97,22 @@ var brush_generator = function(){
       .attr("d", area)
       .attr("fill", '#aec7e8');
 
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + h + ")")
-      .call(xAxis);
+     var xAxis = d3.svg.axis()
+                  .scale(xScale)
+                  .orient('bottom');
+      var yAxis = d3.svg.axis()
+                  .scale(yScale)
+                  .orient('left')
+                  .ticks(3);
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + h + ")")
+          .call(xAxis);
+
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
 
     var gBrush = svg.append("g")
       .attr("class", "brush")
@@ -128,7 +135,7 @@ var brush_generator = function(){
 
   // function to initiate 
   var init = function(){
-    //initCanvasSize();
+    initCanvasSize();
       // read in static data tables 
       var parseformat = d3.time.format("%d-%b-%y").parse;
       d3.csv("weeksum.csv", function(data){
@@ -146,7 +153,7 @@ var brush_generator = function(){
   // function to redraw brush
   var redraw = function(){
     d3.select("div#brush svg").remove();
-    //initCanvasSize();
+    initCanvasSize();
     draw(dataset);
     // console.log(current_range);
     update_view(current_range);
