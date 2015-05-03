@@ -1,5 +1,5 @@
 var lineplot_generator = function(){
-  var margin = {top: 50, right: 10, bottom: 100, left: 40},
+  var margin = {top: 50, right: 160, bottom: 100, left: 40},
       height = 500 - margin.top - margin.bottom,
       cell_height = 40,
       canvas_width,
@@ -9,7 +9,7 @@ var lineplot_generator = function(){
       canvas_width = +(d3.select('#lineplot').style('width').replace('px', ''));
       width = canvas_width - margin.left - margin.right;
   };
-  var color = d3.scale.category20();
+  var color = d3.scale.category20c();
 
   // month number start from 0!!!
   var upper_time_limit = new Date(2014, 06 - 1, 01);
@@ -27,14 +27,14 @@ var lineplot_generator = function(){
     if(typeof time_range !== 'undefined'){
       current_range = time_range;
     }
-    //TODO update stack area
+    
      d3.select("div#lineplot svg").remove();
      var xScale = d3.time.scale()
                     .range([0, width])
                     .domain(current_range);
-     // var yScale = d3.scale.linear()
-     //                .domain([0, d3.max(data.map(function(d) { return d.counts; }))]) 
-     //                .nice();
+     var yScale = d3.scale.linear()
+                    .domain([0, d3.max(data.map(function(d) { return d.counts; }))]) 
+                    .nice();
        
       // tell scale function the domain         
       var x = d3.time.scale().range([0, width]),
@@ -69,7 +69,8 @@ var lineplot_generator = function(){
             return d3.max(g.values, function(y) { return y.y + y.y0; });
         });
       y.domain([0, maxY]);
-      
+      color.domain(d3.keys(data));
+
       var stackarea = svg.selectAll(".stackarea")
                        .data(data)
                        .enter().append("g")
@@ -92,9 +93,11 @@ var lineplot_generator = function(){
       var xAxis = d3.svg.axis()
                   .scale(xScale)
                   .orient('bottom');
-      // var yAxis = d3.svg.axis()
-      //             .scale(yScale)
-      //             .orient('left');
+      var yAxis = d3.svg.axis()
+                  .scale(yScale)
+                  .orient('left')                      
+                  .ticks(10, "");
+
 
       // smart axis depending on the range of days    
       // if( days < 1000)
@@ -114,6 +117,44 @@ var lineplot_generator = function(){
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")")
           .call(xAxis);
+
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+        // .append("text")
+        // .attr("transform", "rotate(-90)")
+        // .attr("y", 6)
+        // .attr("dy", ".71em")
+        // .style("text-anchor", "end")
+        // .text("count");
+
+      var nlevel = data.length;  
+      var legend = svg.selectAll(".legend")
+                      .data(data)
+                      .enter().append("g")
+                      .attr("class", "legend")
+                      .attr("transform", function(d, i) { return "translate(0," + i * height/nlevel + ")"; });
+      
+      // define maximum legend height
+      var maxBlockheight = 21;
+
+      legend.append("rect")
+          .attr("x", width - 20)
+          .attr("width", Math.max(height / nlevel, maxBlockheight))
+          .attr("height", Math.max(height / nlevel, maxBlockheight))
+          .style("fill", function(d) { return color(d.key); });
+
+      var totalY = nlevel * Math.max(height / nlevel, maxBlockheight);
+
+      legend.append("text")
+          .attr("x", (width + Math.max(height / nlevel, maxBlockheight)))
+          .attr("dx", -18)
+          .attr("y", Math.max(height / nlevel, maxBlockheight))
+          .attr("dy", -10)
+          .attr("font-family", "sans-serif")
+          .attr("font-size", "13px")
+          .style("text-anchor", "start")
+          .text(function(d) { return d.key; });  
 
             
   };  
@@ -180,8 +221,6 @@ var lineplot_generator = function(){
               })
             };
         });
-
-        console.log(data);  
 
         // // Sort date
         // function sortByDateAscending(a, b) {

@@ -25,6 +25,7 @@ var barplot_generator = function() {
         // nesting the data
         var nested_data = d3.nest()
             .key(function(d) { return d.category; })
+            .sortKeys(d3.ascending)
             .entries(filtered_data);
 
         // console.log(nested_data);
@@ -37,7 +38,8 @@ var barplot_generator = function() {
         }
 
         // console.log(aggregated_data);
-        var color = d3.scale.category20();
+        var color = d3.scale.category20c();
+        color.domain(d3.keys(data));
 
         var margin = {top: 0, right: 10, bottom: 0, left: 40},
         width = 300 - margin.left - margin.right,
