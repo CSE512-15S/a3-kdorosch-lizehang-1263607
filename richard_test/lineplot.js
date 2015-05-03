@@ -119,16 +119,16 @@ var lineplot_generator = function(){
   };  
 
   var init = function(nday){
-<<<<<<< HEAD
-        var that = this;
-        //initCanvasSize();
-        svg = d3.select("div#lineplot"); 
-=======
+// <<<<<<< HEAD
+//         var that = this;
+//         //initCanvasSize();
+//         svg = d3.select("div#lineplot"); 
+// =======
       // var that = this;
       $("#lineplot").empty();
-      initCanvasSize();
+      //initCanvasSize();
       svg = d3.select("div#lineplot"); 
->>>>>>> 36e1b0fc2b1c2a500ceb49e5d5ca7981b9ee4216
+
 
       var parseformat = d3.time.format("%Y-%m-%d").parse;
 
