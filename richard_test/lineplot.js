@@ -10,8 +10,7 @@ var lineplot_generator = function(){
   //     canvas_width = +(d3.select('#lineplot').style('width').replace('px', ''));
   //     width = canvas_width - margin.left - margin.right;
   // };
-  var color = d3.scale.category20c();
-  color.domain(category_domain);
+
 
   // month number start from 0!!!
   var upper_time_limit = new Date(2014, 06 - 1, 01);
@@ -24,6 +23,9 @@ var lineplot_generator = function(){
 
 
  var update_view = function(time_range){
+    var color = d3.scale.category20c();
+    color.domain(category_domain);
+    console.log("lineplot: " + category_domain);
     
     // if not called with a time range
     if(typeof time_range !== 'undefined'){

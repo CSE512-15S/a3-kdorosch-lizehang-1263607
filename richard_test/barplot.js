@@ -40,6 +40,7 @@ var barplot_generator = function() {
         // console.log(aggregated_data);
         var color = d3.scale.category20c();
         color.domain(category_domain.reverse());
+        console.log("barplot: " + category_domain);
 
         var tip = d3.tip()
             .attr('class', 'd3-tip')
@@ -49,7 +50,7 @@ var barplot_generator = function() {
                 return "<strong><span style='color:red'>" + d.category + "</span></strong>";
             })
 
-        var margin = {top: 20, right: 10, bottom: 100, left: 40},
+        var margin = {top: 20, right: 50, bottom: 100, left: 40},
         width = 300 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
         var x = d3.scale.ordinal()
@@ -77,9 +78,8 @@ var barplot_generator = function() {
         var ymax = d3.max(aggregated_data, function(d) {return d.count});
         y.domain([0, 1.1*ymax]);
 
-        console.log("before");
+    
         barplot_svg.call(tip);
-        console.log("after");
 
         barplot_svg.append("g")
             .attr("class", "x axis")
