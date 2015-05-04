@@ -28,17 +28,18 @@ If you put your work online, please also write a [one-line description and add a
 
 Initially, we intended to use two bar plots to represent this data. The first (lefthand side) would split the data based on a given dimension, with the total number of visits associated with that dimension shown on the y-axis. Each bar of this plot would be clickable with an interface that pops up and allows the user to select a second dimension on which to further split that bar. This would enable a deeper view of the data.
 
-However, we felt that this was not a good match for our dataset as it completely ignored the valuable temporal data that we had. Additionally, the “deeper view” with the multiple levels of splitting did not reveal that interesting of information. Instead, we chose a stacked line plot to represent this data, which could be brushed to select different periods of time. This is far more interesting and reveals patterns within and between quarters. The right plot would then show the total counts for the selected time period using the same dimension as on the left.
+However, we felt that this was not a good match for our dataset as it completely ignored the valuable temporal data that we had. Additionally, the “deeper view” with the multiple levels of splitting did not reveal that interesting of information. Instead, we chose a stacked line plot to represent this data, which could be brushed to select different periods of time. This is far more interesting and reveals patterns within and between quarters. The right plot would then show the total counts for the selected time period using the same dimension as on the left. We decided this before implementing and so are including it as part of the storyboard.
 
-Displaying the categories alphabetically was producing somewhat of a false gradient in the visualization. We chose to instead group the categories roughly by subject, i.e. languages and STEM, so these categories could be visually grouped by the eye quite naturally and be easier to compare as a whole.
+
 
 
 ### Changes between Storyboard and the Final Implementation
 
-| Initial | Final |
-|---------|-------|
-| Left plot does ___ | Right plot does ___ etc. |
+* Two categories in the "subject" dimension were dominating the dataset and not providing very much information about the distribution of visits to the center. These categories were "Anything Goes" and "Commuter Commons." The latter is an open session for any subject and somewhat separate of the main CLUE resources, so we chose to omit these categories.
 
+* Displaying the categories alphabetically was producing somewhat of a false gradient in the visualization. We chose to instead group the categories roughly by subject, i.e. languages and STEM, so these categories could be visually grouped by the eye quite naturally and be easier to compare as a whole.
+
+* Adding more 
 
 
 ## Development Process
