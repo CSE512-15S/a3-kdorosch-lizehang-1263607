@@ -36,7 +36,57 @@ function processData() {
         for (var i=0; i<currJSON.length; i++) {
             category_list.add(currJSON[i].category);
         }
-        category_domain = category_list.values().sort();
+        if (dimension=="subject"){
+        	// hacky sort to intelligently group categories together
+        	// category_domain = category_list.values().sort();
+        	var languages = [];
+        	var stem = [];
+        	var other = [];
+        	for (var i = 0; i < category_list.values().length; i++) {
+        		var category = category_list.values()[i];
+        	
+        	
+
+        		//Languages
+
+        		if (   category == "Arabic" 
+        			|| category == "Chinese" 
+        			|| category == "French"
+        			|| category == "Japanese"
+        			|| category == "Korean"
+        			|| category == "Spanish"
+        			|| category == "Swedish") {
+        			
+        			languages.push(category);
+        		}
+
+        		//STEM
+        		else if(category == "Bio" 
+        			|| category == "CSE" 
+        			|| category == "Chem"
+        			|| category == "Math"
+        			|| category == "Physics"
+        			|| category == "Stats") {
+        			stem.push(category);
+        		}
+
+        		//other
+        		else {
+        			other.push(category);
+        			//alert(other);
+        		}
+        	};
+        	category_domain = [];
+        	category_domain = category_domain.concat(languages.sort());
+        	category_domain = category_domain.concat(stem.sort());
+        	category_domain = category_domain.concat(other.sort());
+        	// alert(category_domain);
+        	
+        }
+        else {
+        	category_domain = category_list.values().sort();
+        }
+        
         
 	}
 	// handle redrawing of existing bar chart

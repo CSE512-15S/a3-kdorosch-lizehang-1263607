@@ -4,13 +4,8 @@ var lineplot_generator = function(){
       cell_height = 40,
       canvas_width,
       width = 550 - margin.left - margin.right
-      width_legend = 160;
-  
-  // var initCanvasSize = function(){
-  //     canvas_width = +(d3.select('#lineplot').style('width').replace('px', ''));
-  //     width = canvas_width - margin.left - margin.right;
-  // };
-  var color = d3.scale.category20c();
+      width_legend = 200;
+
 
   // month number start from 0!!!
   var upper_time_limit = new Date(2014, 06 - 1, 01);
@@ -21,8 +16,11 @@ var lineplot_generator = function(){
       return milliseconds / 86400000;
     };
 
-
+  var color = d3.scale.category20c();
+    color.domain(category_domain.reverse());
  var update_view = function(time_range){
+    // var color = d3.scale.category20c();
+    color.domain(category_domain);
     
     // if not called with a time range
     if(typeof time_range !== 'undefined'){
@@ -39,7 +37,6 @@ var lineplot_generator = function(){
       var x = d3.time.scale().range([0, width]),
           y = d3.scale.linear().range([height, 0]);  
       x.domain(current_range);
-      // y.domain([0, d3.max(data.map(function(d) { return d.counts; }))]);
 
       // create a area
       var area = d3.svg.area()
@@ -68,7 +65,8 @@ var lineplot_generator = function(){
             return d3.max(g.values, function(y) { return y.y + y.y0; });
         });
       y.domain([0, maxY]);
-      color.domain(category_domain);
+    
+      
 
       var stackarea = svg.selectAll(".stackarea")
                        .data(data)
@@ -80,34 +78,39 @@ var lineplot_generator = function(){
           .attr("class", "area")
           .attr("width", width)
           .attr("d", function(d) { return area(d.values); })
-          .style("fill", function(d) { return color(d.key); });
+          .style("fill", function(d) { return color(d.key); })
+          .on("mouseover", function(d) {
+            d3.select("#tooltip")
+              .select("#value")
+              .text(d.key)
+              .style("left", d3.event.pageX)
+              .style("top", d3.event.pageY)
+              .style("background", this.style.fill);
+            d3.select("#tooltip").classed("hidden", false);
+          })
+          .on("mousemove", function(d) {
+            d3.select("#tooltip")
+              .select("#value")
+              .text(d.key)
+              .style("left", d3.event.pageX)
+              .style("top", d3.event.pageY); 
+            //return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+          })
+          .on("mouseout", function(d) {
+            d3.select("#tooltip").classed("hidden", true);
+          })
 
-     // svg.selectAll("path")
-     //    .data(stack(data))
-     //    .append("path")
-     //    .attr("d", function(d) { return area(d.values); })
-     //    .append("title")
-     //    .text(function(d) { return d.subject; });
+      // });
 
       // Draw the xAxis text
       var days = dateDiff(current_range[0], current_range[1])
       var xAxis = d3.svg.axis()
                   .scale(x)
+                  .ticks(6)
                   .orient('bottom');
       var yAxis = d3.svg.axis()
                   .scale(y)
                   .orient('left');
-
-      // smart axis depending on the range of days    
-      // if( days < 1000)
-      //  xAxis.ticks(d3.time.month, 1)
-      //       .tickFormat(d3.time.format('%b-%Y'));
-      // if( days < 90)
-      //  xAxis.ticks(d3.time.week, 1)
-      //       .tickFormat(d3.time.format('%d-%b'));
-      // if( days < 14)
-      //  xAxis.ticks(d3.time.day, 1)
-      //       .tickFormat(d3.time.format('%d-%b'));
 
       svg.append("g")
           .attr("class", "x axis")
@@ -130,19 +133,24 @@ var lineplot_generator = function(){
       var maxBlockheight = height/14;
       // define all categories in reverse order
       var categories = [];
-      data.forEach(function(d){categories.push(d.key)});
+      // data.forEach(function(d){categories.push(d.key)});
+      // categories.reverse();
+      categories = category_domain.slice(0);
+
       categories.reverse();
 
       // new svg for legend
-      var svg2 = d3.select("#lineplot")
+      var legend_svg = d3.select("#lineplot")
                    .append("svg")
                    .attr("width", width_legend )
                    .attr("height", height + margin.top + margin.bottom)
                    .append("g")
-                   .attr("transform", "translate(0," + margin.top + ")");
+                   // .attr("transform", "translate(0," + margin.top + ")");
+                   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                    "translate(" + margin.left + "," + margin.top + ")"
 
-      var legend = svg2.selectAll(".legend")
-                      .data(categories)
+      var legend = legend_svg.selectAll(".legend")
+                      .data(categories.sort())
                       .enter().append("g")
                       .attr("class", "legend")
                       .attr("transform", function(d, i) { return "translate(0," + i * Math.min(height / nlevel, maxBlockheight) + ")"; });
@@ -182,19 +190,19 @@ var lineplot_generator = function(){
       var binTime = function(time, nday){
         return lower_time_limit.getTime() + Math.floor(((time.getTime() - lower_time_limit.getTime()) / (nday*86400000))) * (nday*86400000);
       }
-      // d3.csv("students_data_v4.csv", function(error, csv_data) {
+
        
       // data structure:
       // {key: math, 
       //  value: [{key: some_date, value: counts}, {...}, {...}]}
        data = d3.nest()
                 .key(function(d) { return d.category;})
-                .sortKeys(d3.ascending)
-                .key(function(d) { return binTime(parseformat(d.check_in_date), nday);}) 
-                .sortKeys(d3.ascending)
-                .rollup(function(leaves) { return leaves.length; })
-                .entries(currJSON);
-                // .entries(csv_data);
+                .sortKeys(function(a,b) { return category_domain.indexOf(a) - category_domain.indexOf(b);})
+                  .key(function(d) { return binTime(parseformat(d.check_in_date), nday);}) 
+                  .sortKeys(d3.ascending)
+                  .rollup(function(leaves) { return leaves.length; })
+                  .entries(currJSON);
+
         // for stack area plot, need all keys present in data
         // not sure what best practice to do this, make use of the time limit now
         // para: number of days as minimum interval (only integer days now)
@@ -210,12 +218,9 @@ var lineplot_generator = function(){
             }
             return allKeys;
         }
-        // var test = makeAllKeys(1);
-        // console.log(test);
 
         // find all dates
         var allDates = makeAllKeys(nday);
-        //console.log(allDates);
 
         // out loop: for all subject, apply the function
         data = data.map(function(subjObj){
@@ -231,10 +236,6 @@ var lineplot_generator = function(){
             };
         });
 
-        // // Sort date
-        // function sortByDateAscending(a, b) {
-        //     return a.date - b.date;
-        // }
 
         data.forEach(function(d) {
            d.subject = d.key;
@@ -245,26 +246,18 @@ var lineplot_generator = function(){
            })
           });
 
-       // console.log(data[1].values[0]);
-       // console.log(data[2].values[0]);
-       // console.log(data[3].values[0]);
-       // console.log(data[4].values[0]);
-       // console.log("first day should be:" + lower_time_limit);
 
         this.data = data;
-      // });
         
   }; 
   var init = function(nday){
         update_data(7);
         update_view();
-      // });
         
   }; 
 
   return {
     init: init,
-    // initCanvasSize: initCanvasSize,
     update: update_view
   }; 
 };
