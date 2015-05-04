@@ -6,11 +6,15 @@
 2. Zehang Li lizehang@uw.edu
 3. Kuangyou Yao kuangyou@uw.edu
 
-## Project Name
+## Visualization of students coming to a study center
 
-This is an example repository for your assignment 3 submission. 
-(Put your a brief description of your final interactive visualization application and your dataset here.)
+####The Dataset
 
+The visualization is based on the check-in system of the UW’s late night study center – Center of learning and undergraduates’ enrichment. The center keeps track of each student coming into the center, including their student ID, class standings, subjects to study, gender, check in time and other miscellaneous. 
+
+####Modification
+1. Data was initially in Excel spread sheet. We converted it into a MySQL database accompanied with a PHP-powered JSON server.
+2. We excluded the less-so-interesting general data, like students coming in for “general purpose” and some false data like a Swedish session, which CLUE doesn’t have. 
 
 ## Running Instructions
 
@@ -29,6 +33,17 @@ A paragraph explaining changes between the storyboard and the final implementati
 
 
 ## Development Process
+
+#####Katie
+
+#####Zehang
+
+#####Kuangyou Yao
+- PHP/MySQL server that, provides JSON data for the application to visualize.
+- Implementing the responsive bar plot.
+
+- I spent like 2.5 hours migrating the Excel data to a programmable MySQL environment and like 4 hours getting the bar plot to behave correctly. I would say the hardest is actually understand how and why D3 works. I actually found most of the useful infomation at ramdom places on the internet.
+
 
 Include:
 - Breakdown of how the work was split among the group members. 
