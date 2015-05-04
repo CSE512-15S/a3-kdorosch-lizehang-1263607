@@ -25,7 +25,6 @@ var lineplot_generator = function(){
  var update_view = function(time_range){
     var color = d3.scale.category20c();
     color.domain(category_domain);
-    console.log("lineplot: " + category_domain);
     
     // if not called with a time range
     if(typeof time_range !== 'undefined'){
@@ -97,6 +96,7 @@ var lineplot_generator = function(){
       var days = dateDiff(current_range[0], current_range[1])
       var xAxis = d3.svg.axis()
                   .scale(x)
+                  .ticks(6)
                   .orient('bottom');
       var yAxis = d3.svg.axis()
                   .scale(y)
