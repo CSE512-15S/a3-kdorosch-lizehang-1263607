@@ -16,9 +16,10 @@ var lineplot_generator = function(){
       return milliseconds / 86400000;
     };
 
-
+  var color = d3.scale.category20c();
+    color.domain(category_domain.reverse());
  var update_view = function(time_range){
-    var color = d3.scale.category20c();
+    // var color = d3.scale.category20c();
     color.domain(category_domain);
     
     // if not called with a time range
@@ -134,7 +135,7 @@ var lineplot_generator = function(){
       var categories = [];
       // data.forEach(function(d){categories.push(d.key)});
       // categories.reverse();
-      categories = category_domain;
+      categories = category_domain.slice(0);
 
       categories.reverse();
 
@@ -149,7 +150,7 @@ var lineplot_generator = function(){
                     "translate(" + margin.left + "," + margin.top + ")"
 
       var legend = legend_svg.selectAll(".legend")
-                      .data(categories)
+                      .data(categories.sort())
                       .enter().append("g")
                       .attr("class", "legend")
                       .attr("transform", function(d, i) { return "translate(0," + i * Math.min(height / nlevel, maxBlockheight) + ")"; });

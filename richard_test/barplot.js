@@ -39,15 +39,8 @@ var barplot_generator = function() {
 
         // console.log(aggregated_data);
         var color = d3.scale.category20c();
-        color.domain(category_domain.reverse());
-
-        // var tip = d3.tip()
-        //     .attr('class', 'd3-tip')
-        //     .offset([-10, 0])
-        //     .html(function(d) {
-        //         console.log("category is: " + d.category);
-        //         return "<strong>" + d.category + "</strong>";
-        //     })
+        // var category_domain_reverse = category_domain.slice(0).reverse();
+        color.domain(category_domain);
 
         var margin = {top: 20, right: 50, bottom: 150, left: 40},
         width = 300 - margin.left - margin.right,
