@@ -11,6 +11,14 @@ svg {
 	font-family: "Arial", Arial;
 }
 
+/* test bar style */
+div.bar {
+		display: inline-block;
+		width: 20px;
+		height: 75px;	/* Gets overriden by D3-assigned height below */
+		margin-right: 2px;
+	}
+
 /* Style of the x-axis line */
 .axis path,
 .axis line {
@@ -36,13 +44,17 @@ svg {
 	text-align: center;
 	width: auto;
 	height: 30px;
-	padding: 2px;
+	padding: 10px;
 	font: 12px Arial;
 	background: white;
 	border: 1px;
 	border-color: #000;
 	border-radius: 8px;
+	-webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
 	pointer-events: none;
+	left:340px;
+    top:210px;
 }
 #tooltip.hidden {
 	display:none;
@@ -63,8 +75,26 @@ svg {
 	position: absolute;
 	width: auto;
 	height: auto;
-	left: 700px;
+	left: 340px;
+	top: 140px;
+	/*TODO need to fill in position here*/
+}
+
+#barplot {
+	position: absolute;
+	width: auto;
+	height: auto;
+	left: 760px;
 	top: 100px;
 	/*TODO need to fill in position here*/
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
 }
 
