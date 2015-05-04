@@ -38,12 +38,13 @@ The plot on the righthand side eases the ability to see counts and make comparis
 
 ### Changes between Storyboard and the Final Implementation
 
-* *Removed uninformative data* Two categories in the "subject" dimension were dominating the dataset and not providing very much information about the distribution of visits to the center. These categories were "Anything Goes" and "Commuter Commons." The latter is an open session for any subject and somewhat separate of the main CLUE resources, so we chose to omit these categories.
+* **Removed uninformative data. --** Two categories in the "subject" dimension were dominating the dataset and not providing very much information about the distribution of visits to the center. These categories were "Anything Goes" and "Commuter Commons." The latter is an open session for any subject and somewhat separate of the main CLUE resources, so we chose to omit these categories.
 
-* *Changed the ordering of the "subject" category* Displaying the categories alphabetically was producing somewhat of a false gradient in the visualization. We chose to instead group the categories roughly by subject, i.e. languages and STEM, so these categories could be visually grouped by the eye quite naturally and be easier to compare as a whole.
+* **Changed the ordering of the "subject" category. --** Displaying the categories alphabetically was producing somewhat of a false gradient in the visualization. We chose to instead group the categories roughly by subject, i.e. languages and STEM, so these categories could be visually grouped by the eye quite naturally and be easier to compare as a whole.
 
-* *Changed the right plot's axis from fixed to variable.* Because the brushing can change the range of dates and therefore the total visit count so much, we felt we needed to adjust the y-axis every time this was updated. Although this could potentially be misleading compared to a fixed axis, we felt scaling this was important as the small values got lost and a log plot lost the valuable length comparison. 
+* **Changed the right plot's axis from fixed to variable. --** Because the brushing can change the range of dates and therefore the total visit count so much, we felt we needed to adjust the y-axis every time this was updated. Although this could potentially be misleading compared to a fixed axis, we felt scaling this was important as the small values got lost and a log plot lost the valuable length comparison. 
 
+* **Unexpected changes to binning of dates. --**  The dates in our original data set are accurate down to the minute that the student checked in to the CLUE center. We quickly discovered that even if this was binned into days or hours, the trends overall were lost due to spikes in the dataset. Smaller bands were entirely lost and it was extremely difficult to read once more than a week or so was in view. To combat this, we made the view such that data is binned by weeks at a broader zoom level and binned by days at closer zoom levels.
 
 ## Development Process
 
