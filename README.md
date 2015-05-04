@@ -32,15 +32,17 @@ However, we felt that this was not a good match for our dataset as it completely
 
 We feel the stacked line plot is a good choice of a technique for our dataset as it captures the temporal aspects to reveal interesting patterns but also allows for comparison between different categories within each dimension. Our dataset is also dominated by dimensions rather than measures, which in this case makes it even simpler and more visually helpful to use the same visualization techniques for the majority of the dataset. These encodings are also overlapping, with different terms being used to describe the same datapoints in multiple ways.
 
+The plot on the righthand side eases the ability to see counts and make comparisons between different categories. The colors are consistent with the left plot for quick lookup in the left plot and legend. This plot uses a length encoding to display information in a quick, accessible manner.
+
 
 
 ### Changes between Storyboard and the Final Implementation
 
-* Two categories in the "subject" dimension were dominating the dataset and not providing very much information about the distribution of visits to the center. These categories were "Anything Goes" and "Commuter Commons." The latter is an open session for any subject and somewhat separate of the main CLUE resources, so we chose to omit these categories.
+* *Removed uninformative data* Two categories in the "subject" dimension were dominating the dataset and not providing very much information about the distribution of visits to the center. These categories were "Anything Goes" and "Commuter Commons." The latter is an open session for any subject and somewhat separate of the main CLUE resources, so we chose to omit these categories.
 
-* Displaying the categories alphabetically was producing somewhat of a false gradient in the visualization. We chose to instead group the categories roughly by subject, i.e. languages and STEM, so these categories could be visually grouped by the eye quite naturally and be easier to compare as a whole.
+* *Changed the ordering of the "subject" category* Displaying the categories alphabetically was producing somewhat of a false gradient in the visualization. We chose to instead group the categories roughly by subject, i.e. languages and STEM, so these categories could be visually grouped by the eye quite naturally and be easier to compare as a whole.
 
-* Adding more 
+* *Changed the right plot's axis from fixed to variable.* Because the brushing can change the range of dates and therefore the total visit count so much, we felt we needed to adjust the y-axis every time this was updated. Although this could potentially be misleading compared to a fixed axis, we felt scaling this was important as the small values got lost and a log plot lost the valuable length comparison. 
 
 
 ## Development Process
