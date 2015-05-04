@@ -16,10 +16,9 @@ var lineplot_generator = function(){
       return milliseconds / 86400000;
     };
 
-  var color = d3.scale.category20c();
-    color.domain(category_domain.reverse());
+ 
+    // color.domain(category_domain.reverse());
  var update_view = function(time_range){
-    // var color = d3.scale.category20c();
     color.domain(category_domain);
     
     // if not called with a time range

@@ -1,5 +1,5 @@
 var barplot_generator = function() {
-    var init_function = function init() {
+    var init_function = function() {
         $("#barplot_svg").empty();
         var dimension = Object.keys(currJSON[0])[0];
         var filtered_data = [];
@@ -37,8 +37,8 @@ var barplot_generator = function() {
             aggregated_data.push({category: currCate, count: currCount});
         }
 
-        // console.log(aggregated_data);
-        var color = d3.scale.category20c();
+        // // console.log(aggregated_data);
+        // var color = d3.scale.category20c();
         // var category_domain_reverse = category_domain.slice(0).reverse();
         color.domain(category_domain);
 

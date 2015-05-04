@@ -6,6 +6,7 @@ var barplot_svg;
 
 var start_time = new Date(2013, 06 - 1, 01).getTime();
 var end_time = new Date(2014, 09 - 1, 22).getTime();
+var color = d3.scale.category20c();
 
 function SelectDimension() {
 	// dimension could be "subject", "s1_gender", "class", "location", "spcl_prog_text" and "resident"
