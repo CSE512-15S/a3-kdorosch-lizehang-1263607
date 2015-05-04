@@ -46,6 +46,8 @@ The plot on the righthand side eases the ability to see counts and make comparis
 
 ## Development Process
 
+All three members spent about 5 hours in group meeting to decide on the direction and basic layout of the visualizaiton and discussed the various difficulties. The individual work breakdown is as follows:
+
 #####Katie
 
 #####Zehang
