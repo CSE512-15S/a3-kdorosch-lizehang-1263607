@@ -1,6 +1,5 @@
 # a3-kdorosch-lizehang-1263607
 ===============
-
 ## Team Members
 
 1. Kathryn Doroschak kdorosch@uw.edu
@@ -15,7 +14,7 @@ This is an example repository for your assignment 3 submission.
 
 ## Running Instructions
 
-Access our visualization at http://cse512-15s.github.io/a3-kdorosch-lizehang-1263607/richard_test/ or download this repository and run `python -m SimpleHTTPServer 9000` and access this from http://localhost:9000/.
+Access our visualization at http://cse512-15s.github.io/a3-kdorosch-lizehang-kuangyou/richard_test/ or download this repository and run `python -m SimpleHTTPServer 9000` and access this from http://localhost:9000/.
 
 If you put your work online, please also write a [one-line description and add a link to your final work](http://note.io/1n3u46s) so people can access it directly from the CSE512-15S page.
 
