@@ -44,13 +44,17 @@ div.bar {
 	text-align: center;
 	width: auto;
 	height: 30px;
-	padding: 2px;
+	padding: 10px;
 	font: 12px Arial;
 	background: white;
 	border: 1px;
 	border-color: #000;
 	border-radius: 8px;
+	-webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
 	pointer-events: none;
+	left:340px;
+    top:210px;
 }
 #tooltip.hidden {
 	display:none;
