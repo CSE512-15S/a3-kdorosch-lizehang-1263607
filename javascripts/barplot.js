@@ -43,8 +43,8 @@ var barplot_generator = function() {
         // color.domain(category_domain);
 
         var margin = {top: 20, right: 50, bottom: 150, left: 40},
-        width = 300 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+        width = 500 - margin.left - margin.right,
+        height = 600 - margin.top - margin.bottom;
         var x = d3.scale.ordinal()
                   .rangeRoundBands([0, width], 0.1);
 
