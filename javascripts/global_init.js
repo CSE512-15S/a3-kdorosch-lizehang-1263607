@@ -20,7 +20,7 @@ function SelectDimension() {
 	}
 	
 	// Talk to the JSON server
-	var remote = "http://107.170.209.163/CSE512/left_graph.php?q=" + dimension;
+	var remote = "http://192.241.216.102/CSE512/left_graph.php?q=" + dimension;
 	var request = new XMLHttpRequest();
 	request.open("GET", remote, false);
 	request.onload = processData;

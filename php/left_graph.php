@@ -4,7 +4,7 @@
 	header('Content-Type: application/json');
 	header('Access-Control-Allow-Origin: *');
 
-	$db = new PDO("mysql:dbname=CLUE;host=localhost","root","461298");
+	$db = new PDO("mysql:dbname=CLUE;host=localhost","root","461298cowboy");
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 	// subject, gender, spcl_prog_text, resident, class
