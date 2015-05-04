@@ -4,13 +4,14 @@ var lineplot_generator = function(){
       cell_height = 40,
       canvas_width,
       width = 550 - margin.left - margin.right
-      width_legend = 160;
+      width_legend = 200;
   
   // var initCanvasSize = function(){
   //     canvas_width = +(d3.select('#lineplot').style('width').replace('px', ''));
   //     width = canvas_width - margin.left - margin.right;
   // };
   var color = d3.scale.category20c();
+  color.domain(category_domain);
 
   // month number start from 0!!!
   var upper_time_limit = new Date(2014, 06 - 1, 01);
@@ -68,7 +69,8 @@ var lineplot_generator = function(){
             return d3.max(g.values, function(y) { return y.y + y.y0; });
         });
       y.domain([0, maxY]);
-      color.domain(category_domain);
+    
+      
 
       var stackarea = svg.selectAll(".stackarea")
                        .data(data)
@@ -130,18 +132,23 @@ var lineplot_generator = function(){
       var maxBlockheight = height/14;
       // define all categories in reverse order
       var categories = [];
-      data.forEach(function(d){categories.push(d.key)});
+      // data.forEach(function(d){categories.push(d.key)});
+      // categories.reverse();
+      categories = category_domain;
+      alert(categories);
       categories.reverse();
 
       // new svg for legend
-      var svg2 = d3.select("#lineplot")
+      var legend_svg = d3.select("#lineplot")
                    .append("svg")
                    .attr("width", width_legend )
                    .attr("height", height + margin.top + margin.bottom)
                    .append("g")
-                   .attr("transform", "translate(0," + margin.top + ")");
+                   // .attr("transform", "translate(0," + margin.top + ")");
+                   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                    "translate(" + margin.left + "," + margin.top + ")"
 
-      var legend = svg2.selectAll(".legend")
+      var legend = legend_svg.selectAll(".legend")
                       .data(categories)
                       .enter().append("g")
                       .attr("class", "legend")
@@ -189,11 +196,11 @@ var lineplot_generator = function(){
       //  value: [{key: some_date, value: counts}, {...}, {...}]}
        data = d3.nest()
                 .key(function(d) { return d.category;})
-                .sortKeys(d3.ascending)
-                .key(function(d) { return binTime(parseformat(d.check_in_date), nday);}) 
-                .sortKeys(d3.ascending)
-                .rollup(function(leaves) { return leaves.length; })
-                .entries(currJSON);
+                .sortKeys(function(a,b) { return category_domain.indexOf(a) - category_domain.indexOf(b);})
+                  .key(function(d) { return binTime(parseformat(d.check_in_date), nday);}) 
+                  .sortKeys(d3.ascending)
+                  .rollup(function(leaves) { return leaves.length; })
+                  .entries(currJSON);
                 // .entries(csv_data);
         // for stack area plot, need all keys present in data
         // not sure what best practice to do this, make use of the time limit now
