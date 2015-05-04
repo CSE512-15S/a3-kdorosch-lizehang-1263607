@@ -33,11 +33,18 @@ function processData() {
 	if (this.status == 200) {   // 200 stands for we received a file
 		currJSON = JSON.parse(this.responseText);
 		// add vector for all category names (before filtering)
+        
         var category_list = d3.set();
         for (var i=0; i<currJSON.length; i++) {
-            category_list.add(currJSON[i].category);
-        }
-        if (dimension=="subject"){
+			    category_list.add(currJSON[i].category);
+		}
+        
+       
+		if (dimension == "spcl_prog_text"){
+			category_domain = ["None", "ADM SAI", "ATHLETICS", "ATHLETICS-EOP", "EOP", "EOP Special Programs", "INTL/RES.TUIT.ELIG", "RESTRICTED ELIGIBLTY", "SP ATHLETICS", "STAFF/FAC EXEMPT", "UNDERGRAD EXCHANGE", "UNIV EXT", "WA ST CLASS EMPT", "WWAMI"];
+			color.domain(category_domain);
+		}
+        else if (dimension=="subject"){
         	// hacky sort to intelligently group categories together
         	// category_domain = category_list.values().sort();
         	var languages = [];
@@ -77,15 +84,38 @@ function processData() {
         			//alert(other);
         		}
         	};
-        	category_domain = [];
-        	category_domain = category_domain.concat(languages.sort());
-        	category_domain = category_domain.concat(stem.sort());
-        	category_domain = category_domain.concat(other.sort());
-        	// alert(category_domain);
+        	// category_domain = [];
+        	// category_domain = category_domain.concat(languages.sort());
+        	// category_domain = category_domain.concat(stem.sort());
+        	// category_domain = category_domain.concat(other.sort());
+        	// console.log(category_domain);
+			category_domain = ["Arabic", "French", "Spanish",
+						    	     "Chinese", "Korean", "Japanese", 
+						    	     "Bio", "Chem", "Physics", 
+						    	     "CSE",  "Math", "Stats", "ECON"].reverse();
+        	// manually control the colors
+        	color = d3.scale.ordinal()
+						    .domain(["Arabic", "French", "Spanish",
+						    	     "Chinese", "Korean", "Japanese",
+						    	     "Bio", "Chem", "Physics", 
+						    	     "CSE",  "Math", "Stats", "ECON"])
+						    .range(['#3182bd', '#6baed6', '#9ecae1',  
+						    	    '#756bb1', '#9e9ac8', '#bcbddc',
+						    	    '#31a354', '#74c476', '#a1d99b', 
+						    	    '#e6550d', '#fd8d3c', '#fdae6b','#fdd0a2']);
         	
         }
         else {
-        	category_domain = category_list.values().sort();
+        	 // handle the numerical category
+	        if(dimension == 'class'){
+				category_domain = category_list.values().sort(
+					function(a, b) {
+					  return b - a;
+					});
+	        }else{
+	        	category_domain = category_list.values().sort();
+	        }
+        	color.domain(category_domain);
         }
         
         

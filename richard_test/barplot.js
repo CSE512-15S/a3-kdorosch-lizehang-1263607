@@ -40,7 +40,7 @@ var barplot_generator = function() {
         // // console.log(aggregated_data);
         // var color = d3.scale.category20c();
         // var category_domain_reverse = category_domain.slice(0).reverse();
-        color.domain(category_domain);
+        // color.domain(category_domain);
 
         var margin = {top: 20, right: 50, bottom: 150, left: 40},
         width = 300 - margin.left - margin.right,
@@ -66,7 +66,12 @@ var barplot_generator = function() {
                     .append("g")
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        x.domain(aggregated_data.map(function(d) { return d.category; }));
+        // x.domain(aggregated_data.map(function(d) { return d.category; }));
+        var reverse_domain = [];
+            reverse_domain = category_domain.slice(0);
+            reverse_domain.reverse();
+        
+        x.domain(reverse_domain);
         var ymax = d3.max(aggregated_data, function(d) {return d.count});
         y.domain([0, 1.1*ymax]);
 

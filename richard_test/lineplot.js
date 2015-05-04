@@ -19,7 +19,7 @@ var lineplot_generator = function(){
  
     // color.domain(category_domain.reverse());
  var update_view = function(time_range){
-    color.domain(category_domain);
+    // color.domain(category_domain);
     
     // if not called with a time range
     if(typeof time_range !== 'undefined'){
@@ -149,7 +149,7 @@ var lineplot_generator = function(){
                     "translate(" + margin.left + "," + margin.top + ")"
 
       var legend = legend_svg.selectAll(".legend")
-                      .data(categories.sort())
+                      .data(categories)
                       .enter().append("g")
                       .attr("class", "legend")
                       .attr("transform", function(d, i) { return "translate(0," + i * Math.min(height / nlevel, maxBlockheight) + ")"; });
