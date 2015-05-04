@@ -39,7 +39,10 @@ function processData() {
 			    category_list.add(currJSON[i].category);
 		}
         
-       
+       	if(dimension == "class"){
+       		category_domain = ['other', 'Senior', 'Junior', 'Sophomore', 'Freshman'];
+       		color.domain(category_domain);
+       	}
 		if (dimension == "spcl_prog_text"){
 			category_domain = ["None", "ADM SAI", "ATHLETICS", "ATHLETICS-EOP", "EOP", "EOP Special Programs", "INTL/RES.TUIT.ELIG", "RESTRICTED ELIGIBLTY", "SP ATHLETICS", "STAFF/FAC EXEMPT", "UNDERGRAD EXCHANGE", "UNIV EXT", "WA ST CLASS EMPT", "WWAMI"];
 			color.domain(category_domain);
