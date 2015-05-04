@@ -49,24 +49,22 @@ The plot on the righthand side eases the ability to see counts and make comparis
 All three members spent about 5 hours in group meeting to decide on the direction and basic layout of the visualizaiton and discussed the various difficulties. The individual work breakdown is as follows:
 
 #####Katie
+* Set up the "skeleton" of the project. Determined and created appropriate containers for objects, handling selection of dimensions and other objects which we abandoned, css styles.
+
+* Determining and implementing the final layout/design of the 3 plots that were drawn. This included refactoring color schemes to remove false gradients, scaling and positioning axes, resizing and moving plots, tooltips, and other finishing details. 
+
+Overall I am very new to javascript and therefore very very (painfully) slow. Even though these components should be quite basic for an experienced javascript programmer, it took me a total of about 20 hours for the pieces I worked on. There are certainly more finishing details that I would like to have added but was limited by time and my limited abilities.
 
 #####Zehang
-- Implementing the stacked area plot and brush. 
+* Implementing the stacked area plot and brush. 
 
-- I spent about 10 hours on the first pass of the project framework, including setting up different scripts for each plots and the methods for the functions to communicate with each other, i.e., let other plots update itself with the time range selected in brush. I spent about another 10 hours on finalizing the visual effects of the two plots, including the color, position, axis, automatic scale change, etc. The most time consuming part for me is to figure out the syntax and flow of js scripts.
+* I spent about 10 hours on the first pass of the project framework, including setting up different scripts for each plots and the methods for the functions to communicate with each other, i.e., let other plots update itself with the time range selected in brush. I spent about another 10 hours on finalizing the visual effects of the two plots, including the color, position, axis, automatic scale change, etc. The most time consuming part for me is to figure out the syntax and flow of js scripts.
 
  
 
 #####Kuangyou Yao
-- PHP/MySQL server that, provides JSON data for the application to visualize.
-- Implementing the responsive bar plot.
+* PHP/MySQL server that, provides JSON data for the application to visualize.
+* Implementing the responsive bar plot.
 
 - I spent like 2.5 hours migrating the Excel data to a programmable MySQL environment and like 4 hours getting the bar plot to behave correctly. I would say the hardest is actually understand how and why D3 works. I actually found most of the useful information at random places on the internet.
-
-
-Include:
-- Breakdown of how the work was split among the group members. 
-- A commentary on the development process, including answers to the following questions: 
-  - Roughly how much time did you spend developing your application?
-  - What aspects took the most time? 
 
