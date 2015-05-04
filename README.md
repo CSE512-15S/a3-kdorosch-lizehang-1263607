@@ -34,11 +34,11 @@ A paragraph explaining changes between the storyboard and the final implementati
 
 ## Development Process
 
-###Kuangyou Yao
-	1. PHP/MySQL server which, provides JSON data for the application to visualize.
-	2. Implementing the responsive bar plot.
+Kuangyou Yao
+- PHP/MySQL server which, provides JSON data for the application to visualize.
+- Implementing the responsive bar plot.
 
-	..I spent like 2 hours migrating the Excel data to a programmable MySQL environment and like 4 hours getting the bar plot to behave correctly. I would say the hardest is actually understand how and why D3 works. I actually found most of the useful infomation at ramdom places on the internet.
+I spent like 2 hours migrating the Excel data to a programmable MySQL environment and like 4 hours getting the bar plot to behave correctly. I would say the hardest is actually understand how and why D3 works. I actually found most of the useful infomation at ramdom places on the internet.
 
 
 Include:
