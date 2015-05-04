@@ -107,14 +107,14 @@ function processData() {
         }
         else {
         	 // handle the numerical category
-	        if(dimension == 'class'){
-				category_domain = category_list.values().sort(
-					function(a, b) {
-					  return b - a;
-					});
-	        }else{
+	   //      if(dimension == 'class'){
+				// category_domain = category_list.values().sort(
+				// 	function(a, b) {
+				// 	  return b - a;
+				// 	});
+	   //      }else{
 	        	category_domain = category_list.values().sort();
-	        }
+	   //      }
         	color.domain(category_domain);
         }
         
