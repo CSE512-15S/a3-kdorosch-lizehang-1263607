@@ -78,25 +78,59 @@ var lineplot_generator = function(){
           .attr("width", width)
           .attr("d", function(d) { return area(d.values); })
           .style("fill", function(d) { return color(d.key); })
+          
           .on("mouseover", function(d) {
             d3.select("#tooltip")
               .select("#value")
               .text(d.key)
               .style("left", d3.event.pageX)
               .style("top", d3.event.pageY)
-              .style("background", this.style.fill);
+              .style("color", this.style.fill)
+              .style("opacity", 0.9);
             d3.select("#tooltip").classed("hidden", false);
+
           })
+
           .on("mousemove", function(d) {
+
+            var SVGmouseTip = d3.select("#tooltip");
+            // get mouse position
+            var mouseCoords = d3.mouse(
+                 SVGmouseTip.node().parentElement);
+            // get absolute mouth position
+            SVGmouseTip.attr("transform", "translate("
+                              + (mouseCoords[0] - 10) + "," 
+                              + (mouseCoords[1] + 10) + ")");
+            d3.select("#tooltip")
+            .style("left", Math.max(0, d3.event.pageX - 150) + "px")
+            .style("top", (d3.event.pageY + 20) + "px");
+                   
             d3.select("#tooltip")
               .select("#value")
               .text(d.key)
+              .style("font-size", "20px")
               .style("left", d3.event.pageX)
-              .style("top", d3.event.pageY); 
-            //return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
-          })
+              .style("top", d3.event.pageY);
+               //return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+
+            // add stroke and highlight
+            d3.select("#tooltip").classed("hidden", false);
+            var curColor = this.style.fill;
+            var newColor = Darken(curColor,0.4);
+            d3.select(this)
+              .attr("stroke", "black")
+              .attr("stroke-width", 1)
+              .style("fill", newColor);
+        
+         })
+
           .on("mouseout", function(d) {
             d3.select("#tooltip").classed("hidden", true);
+            d3.select(this)
+              .transition()
+              .duration(250)
+              .attr("stroke", "none")
+              .style("fill", color(d.key));
           })
 
       // });
@@ -249,6 +283,48 @@ var lineplot_generator = function(){
         this.data = data;
         
   }; 
+
+function Darken(hexColor, factor){ 
+        if ( factor < 0 ) factor = 0;
+
+        var c = hexColor;
+        if ( c.substr(0,1) == "#" )
+        {
+            c = c.substring(1);
+        }
+
+        if ( c.length == 3 || c.length == 6 )
+        {
+            var i = c.length / 3;
+
+            var f;  // the relative distance from white
+
+            var r = parseInt( c.substr(0, i ), 16 );
+            f = ( factor * r / (256-r) );
+            r = Math.floor((256 * f) / (f+1));
+
+            r = r.toString(16);
+            if ( r.length == 1 ) r = "0" + r;
+
+            var g = parseInt( c.substr(i, i), 16);
+            f = ( factor * g / (256-g) );
+            g = Math.floor((256 * f) / (f+1));
+            g = g.toString(16);
+            if ( g.length == 1 ) g = "0" + g;
+
+            var b = parseInt( c.substr( 2*i, i),16 );
+            f = ( factor * b / (256-b) );
+            b = Math.floor((256 * f) / (f+1));
+            b = b.toString(16);
+            if ( b.length == 1 ) b = "0" + b;
+
+            c =  r+g+b;
+         }   
+
+         return "#" + c;
+}
+
+
   var init = function(nday){
         update_data(7);
         update_view();
