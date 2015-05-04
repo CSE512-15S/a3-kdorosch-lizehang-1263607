@@ -34,7 +34,7 @@ A paragraph explaining changes between the storyboard and the final implementati
 
 ## Development Process
 
-Kuangyou Yao
+#####Kuangyou Yao
 - PHP/MySQL server that, provides JSON data for the application to visualize.
 - Implementing the responsive bar plot.
 
