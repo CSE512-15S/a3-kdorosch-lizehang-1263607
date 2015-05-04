@@ -24,7 +24,7 @@ If you put your work online, please also write a [one-line description and add a
 
 ## Story Board
 
-[link to your storyboard pdf file](storyboard.pdf?raw=true)
+[Story board file](http://i.imgur.com/ANOkMvr.jpg)
 
 Initially, we intended to use two bar plots to represent this data. The first (lefthand side) would split the data based on a given dimension, with the total number of visits associated with that dimension shown on the y-axis. Each bar of this plot would be clickable with an interface that pops up and allows the user to select a second dimension on which to further split that bar. This would enable a deeper view of the data.
 
