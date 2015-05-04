@@ -39,7 +39,7 @@ var barplot_generator = function() {
 
         // console.log(aggregated_data);
         var color = d3.scale.category20c();
-        color.domain(category_domain);
+        color.domain(category_domain.reverse());
 
         var tip = d3.tip()
             .attr('class', 'd3-tip')

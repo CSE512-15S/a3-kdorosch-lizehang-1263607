@@ -135,7 +135,7 @@ var lineplot_generator = function(){
       // data.forEach(function(d){categories.push(d.key)});
       // categories.reverse();
       categories = category_domain;
-      alert(categories);
+
       categories.reverse();
 
       // new svg for legend
