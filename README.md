@@ -18,7 +18,7 @@ The visualization is based on the check-in system of the UW’s late night study
 
 ## Running Instructions
 
-Access our visualization at http://cse512-15s.github.io/a3-kdorosch-lizehang-kuangyou/richard_test/ or download this repository and run `python -m SimpleHTTPServer 9000` and access this from http://localhost:9000/.
+Access our visualization at http://cse512-15s.github.io/a3-kdorosch-lizehang-kuangyou/ or download this repository and run `python -m SimpleHTTPServer 9000` and access this from http://localhost:9000/.
 
 ## Story Board
 
