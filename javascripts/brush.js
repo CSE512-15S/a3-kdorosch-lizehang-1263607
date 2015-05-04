@@ -138,7 +138,7 @@ var brush_generator = function(){
     //initCanvasSize();
       // read in static data tables 
       var parseformat = d3.time.format("%d-%b-%y").parse;
-      d3.csv("weeksum.csv", function(data){
+      d3.csv("javascripts/weeksum.csv", function(data){
       dataset = data.map(function(d) {
         return {
           // time: Date.parse(d['week']), 
