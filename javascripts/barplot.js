@@ -71,7 +71,7 @@ var barplot_generator = function() {
             reverse_domain = category_domain.slice(0);
             reverse_domain.reverse();
         
-        x.domain(reverse_domain);
+        x.domain(reverse_domain);        
         var ymax = d3.max(aggregated_data, function(d) {return d.count});
         y.domain([0, 1.1*ymax]);
 
